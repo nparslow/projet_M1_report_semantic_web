@@ -5,4 +5,4 @@ testing git addition ...
 
 all ok?
 
-more and more testing
+less testing
