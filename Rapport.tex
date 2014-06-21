@@ -1,5 +1,4 @@
 
-
 \documentclass[a4paper, 12pt]{article}
 \usepackage[a4paper,margin=0.9in]{geometry}
 \usepackage[utf8]{inputenc}
@@ -107,8 +106,7 @@ La DTD des fichiers XML normalisés se trouve dans l'appendice \hyperref[App:dtd
 \begin{figure}[!ht]
 \centering
 \def\svgwidth{\columnwidth}
-%\input{schema.pdf_tex}
-\input{filler.pdf_tex}
+\input{schema.pdf_tex}
 \caption{L'hiérarchie des entrées définie pour les dictionnaires en XML}
 \label{fig:XMLhierarchy}
 \end{figure}
@@ -241,16 +239,14 @@ Ainsi, l'entrée dans \hyperref[fig:banane_full]{Figure~\ref*{fig:banane_full}} 
 \centering
 \parbox{5cm}{
 \def\svgscale{0.5}
-%\input{entry_banane_full.pdf_tex}
-\input{filler.pdf_tex}
-\caption{First.}
+\input{entry_banane_full.pdf_tex}
+\caption{}
 \label{fig:banane_full}}
 \qquad
 \begin{minipage}{5cm}
 \def\svgscale{0.5}
-%\input{entry_banane_simple.pdf_tex}
-\input{filler.pdf_tex}
-\caption{Second.}
+\input{entry_banane_simple.pdf_tex}
+\caption{}
 \label{fig:banane_simple}
 \end{minipage}
 \end{figure}
@@ -292,8 +288,7 @@ Le processus suivi est donc séquentiel et peut être représenté par le schém
 \begin{figure}[!ht]
 \centering
 \def\svgwidth{\columnwidth}
-%\input{crossword_schema.pdf_tex}
-\input{filler.pdf_tex}
+\input{crossword_schema.pdf_tex}
 \caption{Le schéma du traitement pour la résolution des indices de mots croisés}
 \label{fig:schema_crosswords}
 \end{figure}
@@ -341,14 +336,16 @@ Les résultats de la recherche du graphe sont des lemmes, qui sont à modifier p
 
 \subsubsection{Etape 4 : Filtrage selon les contraintes}
 
-La dernière étape filtre les candidates conjugués afin de ne renvoyer que les candidates qui se conforment aux contraintes de longueur de mot et de caractères déjà devinés. Il n'est pas possible de faire cette étape avant la conjugaison, puisque la conjugaison des lemmes peut avoir pour effet un changement dans la longueur du mot et des caractères qui y apparaîssent.
+La dernière étape filtre les candidates conjugués afin de ne renvoyer que les candidats qui se conforment aux contraintes de longueur de mot et de caractères déjà devinés. Il n'est pas possible de faire cette étape avant la conjugaison, puisque la conjugaison des lemmes peut avoir pour effet un changement dans la longueur du mot et des caractères qui y apparaîssent.
+
+Souvent dans les outils d'aide de résolution de mots fléchés, cette étape est la seule incluse dans le programme, et donc un grand nombre de mots correspondent aux contraintes de longueur et de caractères. Dans notre programme, cette étape sert à enlever la grande quantité de bruit dans les résultats produits directement à partir du réseau, et permet de raffiner en grande partie les résultats. L'avantage d'utiliser le réseau et qu'il y a plus de chance d'avoir des résultats qui correspondent à l'indice donnée et non pas des mots candidats indépendant de l'indice, ce qui permet un traitement plus sophistiqué à cette étape.
 
 \subsection{L'interface graphique}
 
 L'interface graphique, implementée en python en utilisant les bibliothèques Tkinter [REF] et PMW [REF] sert à visualiser les résultats renvoyés aux différentes étapes du processus. Elle est mi-chemin entre un outil pour un joueur de mots croisés, qui ne s'intéresse que aux mots qui se conforment aux contraintes données et un outil plus pédagogue pour montrer les étapes de traitement.
 
 \begin{center}
-\includegraphics{Images/CrossWordInterface.png}
+\includegraphics{CrossWordInterface.png}
 \end{center}
 
 \begin{enumerate}
@@ -365,6 +362,15 @@ L'interface graphique, implementée en python en utilisant les bibliothèques Tk
 
 
 \subsection{Evaluation}
+Le système est difficilement évaluable contre d'autre systèmes de la même nature, parce qu'il n'existe pas de système d'évaluation standard et de scores comparatifs. Il existe beaucoup de systèmes qui ne se basent pas sur la similarité sémantique, mais qui renvoient plutôt tous les mots qui correspndent aux contraintes de longueur et de caractères déjà devinés, et ces systèmes ne fournissent pas un bon moyen de comparer l'approche par réseau sémantique.
+
+Notre évaluation est donc une évaluation simple de la capacité du réseau de trouver la solution d'une indice, et qui compare le taux de réussite pour différents niveaux de difficulté et pour différentes catégories syntaxiques. L'évaluation se fait sur un petit corpus d'indices pris d'un site internet de mots fléchés [REF http://www.notretemps.com/jeux/jeux-en-ligne/mots-fleches-gratuits], qui classe les grilles par niveaux. Le corpus se trouve dans l'annexe [REF - put in annexe]. Il est vrai que l'emplacement des mots dans la grille les uns par rapport aux autres contribue au niveau global de la grille, mais nous estimons que le niveau est aussi reflété dans la difficulté des indices individuelles. Le corpus contient deux niveaux différents (1 et 2) et pour chaque niveau vingt noms communs, vingt noms propres, vingt adjectifs et vingt verbes. Les indices étaient prises aussi objectivement que possible, avec soin de ne pas répéter le même mot cible entre deux indices, ou de prendre exclusivement des indices qui contiennent une seule tournure. Autant de solutions de chaque catégorie ont été sélectionnées afin de comparer le taux de réussite pour chaque catégorie, mais le constat a été que le niveau contient plus de noms communs et moins de nom propres, ce qui influence aussi la difficulté des indices, et ceci sera pris en compte lors de l'analyse des résultats.
+
+Etant donné que notre système est clairement orienté vers une optimisation du rappel, il est moins pertinent de le juger par rapport à la précision des résultats, même si un système idéal serait aussi précis. Pour chaque catégorie syntaxique, nous cherchons d'abord si la solution apparaît dans le réseau et si oui, après combien de voisins les plus proches le mot est trouvé. Pour éviter de parcourir tout le réseau en cas de non-découverte, nous limitons le maximum de voisins renvoyés à 100. Au délà de 100, le mot est considéré non-trouvé.
+
+
+
+
 
 \subsection{Améliorations possibles}
 
