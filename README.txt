@@ -6,3 +6,5 @@ testing git addition ...
 all ok?
 
 average testing
+
+new testing
