@@ -5,4 +5,4 @@ testing git addition ...
 
 all ok?
 
-less testing
+average testing
