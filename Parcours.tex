@@ -19,7 +19,33 @@ C) Le plus proche voisin marqué en bleu. D) L'ajout des voisins de ce voisin bl
 
 \subsubsection{Parcours en largeur dans le cadre de notre réseau}
 
-Dans la plupart des cas, il est intéressant de chercher un mot particulier à partir de son lemme et de sa catégorie syntaxique. Dans le cas où une catégorie syntaxique n'est pas identifiée pour un mot donné, il est aussi intéressant de pouvoir chercher le lemme tout seul. Les deux sortes de noeuds sont présents dans le graphe, et pour chercher un mot d'une catégorie spécifique il suffit de chercher le mot avec un suffixe "_CAT" où CAT est remplacé par sa catégorie syntaxique.
+Dans la plupart des cas, il est intéressant de chercher un mot particulier à partir de son lemme et de sa catégorie syntaxique. Dans le cas où une catégorie syntaxique n'est pas identifiée pour un mot donné, il est aussi intéressant de pouvoir chercher le lemme tout seul. Les deux sortes de noeuds sont présents dans le graphe, et pour chercher un mot d'une catégorie spécifique il suffit de chercher le mot avec un suffixe ``\_CAT" où CAT est remplacé par sa catégorie syntaxique.
+
+Le programme \lq{nearest\_neighbours.py}\rq{} qui se charge du parcours utilise ces informations catégorielles dans son parcours. Bien que les mots du réseau apparaissent plutôt en tant qu'indices dans la matrice (chaque mot ou mot\_cat étant associée à une indice), le programme a accès aux ressources index2word et word2index qui permettent de retrouver une indice à partir d'un mot et un mot à partir d'une indice.
+
+Ceci est utile pour plusieurs raisons:
+
+\begin{enumerate}
+    \item{Puisqu'il existe deux sortes de noeud pour la plupart des mots, une version taggée et une version non-taggée, il est mieux de ne renvoyer qu'une seule sorte de noeud pour éviter des doublons. Notre choix est de ne renvoyer que les mots associés à une catégorie syntaxique afin d'avoir plus de contrôle sur la forme des plus proches voisins renvoyés.}
+    \item{Il peut être important de pouvoir chercher une certaine catégorie syntaxique de mot ou une catégorie parmi un ensemble de catégories. Il est donc important de vérifier la forme des voisins afin de vérifier qu'ils sont de la bonne catégorie.}
+    \item{Le dernier paramètre mentionné dans la section [REF] sert à modifier les poids en fonction de la catégorie de mot recherché. Il est donc important de vérifier les catégories de chaque voisin pour cette raison aussi.}
+\end{enumerate}
+
+Ces deux premières raisons nécessitent de ne renvoyer que les candidats d'une certaine catégorie. Mais il est important de retenir les mots qui ne correspondent pas à ces contraintes, même si ils ne seront pas renvoyés comme plus proches voisins finaux. Nous permettons alors de passer par n'importe quel noeud dans le parcours du graphe, mais uniquement les mots dont la catégorie syntaxique correspond aux contraints sont retenus. Il existe alors deux structures: \lq{mins}\rq{} pour retenir les mots voisins retenus et \lq{mins\_bin}\rq{} pour les mots visités mais non-correspondants aux contraintes. Ceci permet d'ajouter les voisins de ces mots et de les retenir pour récupérer les chemins entre deux noeuds du graphe.
+
+Une structure \lq{parents}\rq{} permet de retenir le parent de chaque nouveau voisin ajouté afin de récupérer le chemin entre deux mots donnés.
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
