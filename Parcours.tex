@@ -1,0 +1,27 @@
+\section{Parcours}
+
+Une fois la matrice construite et des relations de similarité encodées en forme de poids entre les sommets, il faut un moyen d'exploiter ces relations pour mesurer la similarité entre mots. Dans le cas de la matrice d'adjacence produite dans la première version du graphe[REF], il s'agit d'effectuer un parcours du réseau pour retrouver ces relations, puisque seulement les relations adjacentes sont marquées explicitement. Pour la version minimaliste du graphe, l'approche peut se faire plus directement en utilisant le vecteur de distances produit pour chaque mot du réseau.
+
+\subsection{Parcours en largeur}
+
+Un simple parcours en largeur est utilisé pour trouver les k plus proches voisins d'un mot donné. Le principe du parcours en largeur est, en commençant à un sommet donné, d'accroître petit à petit le voisinage direct des sommets déjà visités et d'ajouter le sommet à distance minimum du sommet de départ à chaque fois.
+
+La \hyperref[fig:bfs]{Figure~\ref*{fig:bfs}} illuste l'ajout des voisins et des sommets à distance minimum à partir du sommet rouge (ces plus proches voisins sont en bleu). Le marquage jaune représente le zone du voisinage des sommets déjà trouvés parmi lesquels le prochain sommet minimum sera pris.
+
+\begin{figure}[!ht]
+\centering
+\def\svgwidth{\columnwidth}
+\input{breadthfirst.pdf_tex}
+\caption{Quelques étapes du parcours en largeur de A à F. A) Le sommet de départ. B) L'ajout de ses voisins directs
+C) Le plus proche voisin marqué en bleu. D) L'ajout des voisins de ce voisin bleu. E) L'ajout d'un deuxième plus proche voisin. F) Ajout de ses voisins directs.}
+\label{fig:bfs}
+\end{figure}
+
+\subsubsection{Parcours en largeur dans le cadre de notre réseau}
+
+Dans la plupart des cas, il est intéressant de chercher un mot particulier à partir de son lemme et de sa catégorie syntaxique. Dans le cas où une catégorie syntaxique n'est pas identifiée pour un mot donné, il est aussi intéressant de pouvoir chercher le lemme tout seul. Les deux sortes de noeuds sont présents dans le graphe, et pour chercher un mot d'une catégorie spécifique il suffit de chercher le mot avec un suffixe "_CAT" où CAT est remplacé par sa catégorie syntaxique.
+
+
+
+
+
