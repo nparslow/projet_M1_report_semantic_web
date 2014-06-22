@@ -14,7 +14,7 @@ Les poids des arêtes font partie des paramètres du réseau et sont conservés
 dans un fichier de configuration externe (weight.config), les valeurs étant 
 choisies pour optimiser le réseau pour une tâche particulière. L'optimisation 
 sera discutée dans la partie [XXX]. Il existe un total de 42 liens différent 
-[CHECK] avec un poids différent entre zéro et infinité, un lien de 0 étant un 
+[CHECK] avec un poids différent entre 0 et 1, un lien de 0 étant un 
 lien non-existant dans le graphe.
 
 Ci-dessus un extrait de ce fichier, qui se trouve dans l'annexe [REF] :
@@ -63,11 +63,11 @@ suivante :
 syntaxique du mot y.}
 Ces paramètres servent à privilégier certaines catégories de mot par rapport à 
 d'autres, en supposant que certaines catégories sont plus utiles pour établir 
-des relations sémantiques.[XXX PARLER PLUS] Un paramètre est spécifié pour 
+des relations sémantiques. Ceci se fait en fonction des relations que nous souhaitons faire ressortir. Par exemple, il peut être plus pertinent de prendre en compte les adjectifs si ce sont des descriptions qui doivent ressortir et de donner plus d'importance aux verbes si ce sont des actions qu'il faut caractériser (une plus grande importance se traduisant par un plus petit poids). Un paramètre est spécifié pour 
 chaque catégorie syntaxique afin d'établir des modifications relatives entre 
 catégories. Par exemple, pour la catégorie \lq{adjectif}\rq: \lq{prepare: Adj, 
-None, None, +, 0.6}\rq signifie que 0.6 est ajouté à tout noeud qui va vers un 
-mot de catégorie \lq{Adj}\rq.
+None, None, +, 0.6}\rq{} signifie que 0.6 est ajouté à tout noeud qui va vers un 
+mot de catégorie \lq{Adj}\rq{}.
 
 \subsubsection{Modification en fonction de la catégorie syntaxique du mot x, du 
 mot y et d'un fichier de contextes spécifiques.} 
@@ -80,7 +80,7 @@ des définitions, nous visons à cibler certains mots qui apparaissent dans un
 certain contexte afin de renforcer la relation entre le mot de l'entrée et ces 
 mots cibles. La forme du paramètre dans le fichier de configuration est la même 
 que pour les paramètres précédents, sauf que la deuxième option 
-lq{POS\_de\_x}\rq est spécifiée, ainsi que le chemin vers le fichier de 
+lq{POS\_de\_x}\rq{} est spécifiée, ainsi que le chemin vers le fichier de 
 contextes légitimisants.
 \newline\newline
 Nous jugeons nécessaire de spécifier la catégorie syntaxique du mot x ainsi que 
@@ -120,16 +120,16 @@ le mot y en question, qui signale que ce mot doit être mis en valeur.\newline
 
 \end{itemize}
 
-Par exemple, dans l'entrée du mot \lq{langoureusement}\rq, la définition 
-\lq{d'une manière langoureuse}\rq et le contexte légitimisant \lq{de une manière 
-\#}\rq permettrait de renforcer la relation entre \lq langoureusement\rq et \lq 
-langoureux\rq, ce dernier apparaissant dans la position spécifiée par \#. Dans 
+Par exemple, dans l'entrée du mot \lq{langoureusement}\rq{}, la définition 
+\lq{d'une manière langoureuse}\rq{} et le contexte légitimisant \lq{de une manière 
+\#}\rq{} permettrait de renforcer la relation entre \lq{} langoureusement\rq{} et \lq 
+langoureux\rq{}, ce dernier apparaissant dans la position spécifiée par \#. Dans 
 cet exemple, il n'y a pas de contexte suivant spécifié (puisqu'aucun mot ne suit 
 le \#) et ceci est le cas dans la plupart des contextes, où le contexte 
 précédent est le plus important. Pour simplifier les contextes, nous permettons 
 de ne pas exprimer le \# et dans ce cas, la séquence de mots est considérée 
 comme la séquence précédente du mot y. Pour reprendre l'exemple précédent, le 
-contexte \lq{de une manière \#}\rq peut également être exprimé \lq{de une 
+contexte \lq{de une manière \#}\rq{} peut également être exprimé \lq{de une 
 manière}\rq. Notons que si un contexte suivant est explicité, le \# est 
 nécessaire.
 
@@ -165,6 +165,13 @@ contextes sont applicables pour un nombre de catégories différentes, par exemp
 \lq{synonyme de}\rq, \lq{hyperonyme de}\rq, et d'autres sont plus spécifiques 
 aux contextes.
 
+
+\underline{L'implémentation en Python}\newline
+La correspondance entre les contextes d'un mot à l'intérieur d'une définition et 
+les contextes légitimisant se fait par des expressions régulières, qui sont 
+générées à partir des contextes des fichiers et utilisé pour matcher les contextes
+précédents et suivant.
+
 Chaque contexte est un tuple contenant une expression régulière pour le contexte 
 précédent et une expression régulière pour le contexte suivant.
 
@@ -186,7 +193,22 @@ Les séquences sont transformées de la façon suivante:
     \end{itemize}
 \end{itemize}
 
-\underline{L'implémentation en Python}\newline
-La correspondance entre les contextes d'un mot à l'intérieur d'une définition et 
-les contextes légitimisant se fait par des expressions régulières, qui sont 
-générées à partir des contextes des fichiers.
+[EXAMPLE]
+
+\subsection{Modification en fonction de l'emplacement du mot dans une définition}
+Ce paramètre permet de diminuer le poids des premiers mots d'une définition, en supposant que ce sont les termes les plus importants pour représenter l'entrée. La valeur à rentrer est le nombre de poids au début de la définition qui recevront une valeur diminuée. Le principe est de multiplier chaque arête par une valeur qui commence très petit et augmente jusqu'à la valeur maximale de 2. Cette valeur maximale de 2 sera utilisée pour tous les mots qui suivent ces premiers mots mis en avant. L'accroissement de la valeur multiplicatrice suit une pente avant d'arriver à cette valeur maximale.
+
+Par exemple, si le nombre de mots (n) mis en avant et de cinq, les cinq premiers mots seront multipliés par un plus petit nombre que les mots suivants. Le premier mot sera multiplé par la plus petite valeur, le deuxième mot par la deuxième plus petite valeur et ainsi de suite, jusqu'à la position n+1, où la multiplication reste constante à 2.
+
+
+[IMAGE]
+
+\subsection{Modification en fonction de la catégorie syntaxique recherchée}
+Une autre option est de donner plus d'importance (en forme d'une valeur diminuée) aux mots qui sont de la même catégorie qu'un mot recherché dans le réseau. Ceci peut être important pour la recherche de synonymes, où nous souhaitons privilégier les relations entre mots de la même catégorie. Cette étape n'est pas implémentée dans la création de la matrice, mais plutôt pendant la recherche du graphe (Voir Parcours en largeur [REF]).
+
+
+
+
+
+
+
