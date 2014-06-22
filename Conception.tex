@@ -1,13 +1,31 @@
 \section{La Conception du Graphe}
 
-La construction d'un réseau sémantique à partir d'un dictionnaire est possible 
-grâceà la structure des dictionnaires qui permet de faire ressortir des liens 
-sémantiques.La structure en sens, sous-sens, définitions, et exemples, parmi 
-d'autres informations,mais aussi la structure interne des définitions contient 
-une régularité qu'il estimportant d'exploiter au maximum. Nous tenons donc à 
-conserver le plus possible cettestructure dans la transformation de dictionnaire 
-en graphe. Un graphe est définiformellement comme un ensemble de sommets et un 
-ensemble d'arcs qui relient une pairede sommets.
+L'idée de base pour un reseau semantique est de construire un graphe avec
+les concepts pour noeuds et les liens entre les concepts comme arrêts.
+Il exist deux approches générales à la construction. Premièrement, à
+partir d'un dictionnaire, et deuxièment, à partir d'un corpus.
+Un corpus a l'avantage de contenir les vraies utilisations des mots non-biasé
+par les selections des auteurs, et aussi une grande
+quantité d'utilisations, mais au même temps exige un algorithme non-supervisé pour la
+désambiguisation et un autre algorithme pour la conversion de collocation en lien sémantique.
+Word2Vec \hyperref[bib:word2vec]{[~\ref*{bib:word2vec}]} de
+google réprésente le point actuel de cet approche.
+Par contre, le dictionnaire, même si plus petit, donne plus
+d'information sur les mots rares et possède déjà des liens sémantiques explicites entre
+les mots.
+
+L'utilisation d'un dictionnaire dans les tâches semantiques computationnelles
+existe depuis les années 60 \hyperref[bib:olnyetal]{[~\ref*{bib:olnyetal}]}.
+La construction d'un réseau sémantique à partir d'un dictionnaire (par exemple
+en français \hyperref[bib:gaumeetal]{[~\ref*{bib:gaumeetal}]},
+\hyperref[bib:mulleretal]{[~\ref*{bib:mulleretal}]}) est possible 
+grâce à la structure des dictionnaires qui permet de faire ressortir des liens 
+sémantiques. La structure en sens, sous-sens, définitions, et exemples, parmi 
+d'autres informations, mais aussi la structure interne des définitions contient 
+une régularité qu'il est important d'exploiter au maximum. Nous tenons donc à 
+conserver le plus possible cette structure dans la transformation de dictionnaire 
+en graphe. Un graphe est défini formellement comme un ensemble de sommets et un 
+ensemble d'arcs qui relient une paire de sommets.
 
 \[
 G = <S, A>
@@ -15,21 +33,55 @@ G = <S, A>
 
 Pour représenter un dictionnaire par un graphe, nous considérons que les 
 sommets peuvent être les mots individuels du dictionnaire ou même les niveaux 
-intermédiaires de la structure tels que 'exemple', 'définition', 'synonyme', 
-'antonyme' etc. Les arcs sont alors les liens qui lient les différents éléments 
+intermédiaires de la structure tels que `exemple', `définition', `synonyme', 
+`antonyme' etc. Les arcs sont alors les liens qui lient les différents éléments 
 d'une entrée de dictionnaire et permettraient de trouver un lien entre un 
 lexème donné et la manière dont il est décrit dans son entrée du dictionnaire.
 
-\subsection{Remarques sur le vocabulaire}
-Nous appelons 'mot' toute unité minimale du lexique. Un mot peut être
+Le graphe d'un reseau sémantique est connu d'exhiber les propriétés `Small World'
+\hyperref[bib:veronis]{[~\ref*{bib:veronis}]} -
+terme qui existe depuis l'experience fameux de Travers et Milgram
+\hyperref[bib:traversmilgram]{[~\ref*{bib:traversmilgram}]}.
+Watts et Strogatz \hyperref[bib:wattsstrogatz]{[~\ref*{bib:wattsstrogatz}]}
+ont défini les propriétés d'un graphe `Small World' ainsi:
+Si un graphe possède $N$ noeuds, et $d_{min}(i,j)$ est la distance minimum
+entre noeuds $i$ et $j$, le `Characteristic Path Length' $L$ se défini par:
+$$L = \frac{1}{N(N-1)} \sum\limits_{i\ne j} d_{min}(i,j) $$
+et si pour un noeud $i$, l'ensemble de ses voisins immédiats est $\Gamma (i)$
+et le nombre d'arrêts entre ses voisins immédiats est $E(\Gamma (i))$
+alors le `Clustering Co-efficient' $C$ se défini par:
+$$C = \frac{1}{N}\sum\limits_{i=1}^N \frac{E(\Gamma (i))}{\binom{|\Gamma (i)|}{2}} $$
+Autrement dit, $L$ est la moyenne des distances minimales entre chaque couple
+de noeuds dans le graphe, et $C$ est la moyenne du ratio des liens entre les voisins d'un
+noeud et le nombre maximum de liens possible.
+
+Un graphe `Small World' est défini par les propriétés suivants:
+$$L \sim L_{rand} \sim \frac{log(N)}{log(k)} $$
+et
+$$C >> C_{rand} \sim \frac{2k}{N} $$
+où $k$ est le dégée moyenne des noeuds du graphe et $L_{rand}$ et $C_{rand}$ sont respectivement
+le Characteristic Path Length et Clustering Co-efficient pour un graphe aléatoire.
+
+Par conséquent, un graphe `Small World' n'est pas dense, mais a des distances entre les noeuds
+très petites. Une autre conséquence démontré par Barabási et Albert
+\hyperref[bib:barabasi]{[~\ref*{bib:barabasi}]} est que la distribution des dégrés
+des noeuds suivre une loi de puissance:
+$$ p(k) \propto k^{-\alpha}$$
+où $p(k)$ est la probabilité d'un noeud quelconque d'avoir un dégré k, et
+$\alpha$ s'approche à l'unité (\hyperref[bib:veronis]{[~\ref*{bib:veronis}]})
+
+% make histograms here
+
+\subsection{Remarques sur la terminologie}
+Nous appelons `mot' toute unité minimale du lexique. Un mot peut être
 soitfléchi, soit non-fléchi et par défaut nous faisons référence aux mots 
 non-fléchis sous leur forme de dictionnaire. Par principe, nous restreignons le 
 réseau aux lemmes, mais il est possible qu'il y apparaît des formes fléchies en 
 cas de non-identification du lemme.
 
-Par 'entrée' de dictionnaire nous faisons référence à un groupe d'informations 
+Par `entrée' de dictionnaire nous faisons référence à un groupe d'informations 
 (catégories syntaxiques, sens, définitions, exemples etc.) associées à un mot 
-donné. Par conséquent, le terme 'entrée' peut aussi être utilisé pour dénoter 
+donné. Par conséquent, le terme `entrée' peut aussi être utilisé pour dénoter 
 le mot lui-même, et par extension les informations contenues pour ce mot donné.
 
 La relation sémantique de synonymie est définie entre deux termes de la même 
@@ -39,7 +91,7 @@ l'un pour l'autre sans modifier le sens de la phrase. Cette définition pose
 de trouver une différence de sens ou d'usage entre deux mots malgré le fait 
 qu'ils soient habituellement classés en synonymes. Il est parfois souhaitable 
 de parler de proche-synonymes au lieu de synonymes tout court. Néanmois, 
-nous préférons utiliser le terme 'synonyme' pour parler de ces cas, sans 
+nous préférons utiliser le terme `synonyme' pour parler de ces cas, sans 
 postuler de théorie sur les frontières de la synonymie. Par la suite, la 
 synonymie sera définie en termes de relations attestées dans des ressources 
 externes et nous nous reportons à ces références pour établir si deux mots sont 
@@ -48,9 +100,9 @@ en relation de synonymie ou pas.
 De même pour les relations d'antonymie, d'hyperonymie et d'hyponymie. 
 L'antonymie est définie comme la relation entre deux mots à sens opposé. 
 L'hyperonymie entre un mot dont l'extension contient l'extension d'un autre mot 
-(par exemple, 'véhicule' est l'hypernym de 'voiture'). L'hyponymie est la 
+(par exemple, `véhicule' est l'hypernym de `voiture'). L'hyponymie est la 
 relation inverse d'hyperonymie, entre un mot dont l'extension est incluse dans 
-l'extension d'un autre (pour reprendre le même exemple, 'voiture' est un 
-hyponyme de 'véhicule').
+l'extension d'un autre (pour reprendre le même exemple, `voiture' est un 
+hyponyme de `véhicule').
 
 [AUTRES DEFINITIIONS...]
