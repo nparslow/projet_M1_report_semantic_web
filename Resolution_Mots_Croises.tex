@@ -130,7 +130,74 @@ Le système est difficilement évaluable contre d'autre systèmes de la même na
 
 Notre évaluation est donc une évaluation simple de la capacité du réseau de trouver la solution d'une indice, et qui compare le taux de réussite pour différents niveaux de difficulté et pour différentes catégories syntaxiques. L'évaluation se fait sur un petit corpus d'indices pris d'un site internet de mots fléchés [REF http://www.notretemps.com/jeux/jeux-en-ligne/mots-fleches-gratuits], qui classe les grilles par niveaux. Le corpus se trouve dans l'annexe [REF - put in annexe]. Il est vrai que l'emplacement des mots dans la grille les uns par rapport aux autres contribue au niveau global de la grille, mais nous estimons que le niveau est aussi reflété dans la difficulté des indices individuelles. Le corpus contient deux niveaux différents (1 et 2) et pour chaque niveau vingt noms communs, vingt noms propres, vingt adjectifs et vingt verbes. Les indices étaient prises aussi objectivement que possible, avec soin de ne pas répéter le même mot cible entre deux indices, ou de prendre exclusivement des indices qui contiennent une seule tournure. Autant de solutions de chaque catégorie ont été sélectionnées afin de comparer le taux de réussite pour chaque catégorie, mais le constat a été que le niveau contient plus de noms communs et moins de nom propres, ce qui influence aussi la difficulté des indices.
 
-A part le but principal de trier les mots candidats par rapport à la similarité sémantique, les choix de traitement sont clairement orientés vers une optimisation du rappel (par exemple, le choix de faire une analyse morphologique point à point). Le système d'évaluation se juge donc sur le rappel des résultats. Pour chaque indice, nous cherchons d'abord si la solution apparaît dans le réseau et si oui, après combien de voisins les plus proches le mot est trouvé. Pour éviter de parcourir tout le réseau en cas de non-découverte, nous limitons le maximum de voisins renvoyés à 200. Au délà de 200, le mot est considéré non-trouvé. 
+A part le but principal de trier les mots candidats par rapport à la similarité sémantique, les choix de traitement sont clairement orientés vers une optimisation du rappel (par exemple, le choix de faire une analyse morphologique point à point). Le système d'évaluation se juge donc sur le rappel des résultats. Pour chaque indice, nous cherchons d'abord si la solution apparaît dans le réseau et si oui, après combien de voisins les plus proches le mot est trouvé. Pour éviter de parcourir tout le réseau en cas de non-découverte, nous limitons le maximum de voisins renvoyés à 200. Au délà de 200, le mot est considéré non-trouvé. Une analyse détaillée se trouve ci-dessous :
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{|p{0.8cm} |p{0.8cm} |p{0.8cm}| p{0.8cm} |p{0.8cm}|p{0.8cm}|p{0.8cm}|p{0.8cm}|p{2.8cm}|}
+%\multicolumn{1}{c}{Level} & \multicolumn{4}{c}{Solution trouvée} \\[0.5ex]
+\hline
+ &  &  & \multicolumn{5}{c}{Solution trouvée Après} & \\[0.5ex]
+\hline
+Level & POS & \# & 40 & 80 & 120 & 160 & 200 & Non-trouvée\\[0.5ex]
+\hline
+\hline
+1 & Adj & & & & & & &\\[0.5ex]
+\hline
+1 & NC & & & & & & &\\[0.5ex]
+\hline
+1 & NP & & & & & & &\\[0.5ex]
+\hline
+1 & Adv & & & & & & &\\[0.5ex]
+\hline
+1 & V & & & & & & &\\[0.5ex]
+\hline
+2 & Adj & & & & & & &\\[0.5ex]
+\hline
+2 & NC & & & & & & &\\[0.5ex]
+\hline
+2 & NP & & & & & & &\\[0.5ex]
+\hline
+2 & Adv & & & & & & &\\[0.5ex]
+\hline
+2 & V & & & & & & &\\[0.5ex]
+\hline
+\end{tabular}
+\caption{Résultats de la recherche pour chaque niveau et chaque catégorie syntaxique}
+\label{table:nonlin}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{|p{1.8cm}|p{1.8cm}|p{1.8cm}|p{1.8cm}|p{1.8cm}|p{1.8cm}|p{1.8cm}|}
+%\multicolumn{1}{c}{Level} & \multicolumn{4}{c}{Solution trouvée} \\[0.5ex]
+\hline
+Level x & POS & Nombre & POS identifié & Solution dans le réseau & Solution dans le Lefff & Pas de voisins\\[0.5ex]
+\hline\hline
+1 & Adj & & & & & \\[0.5ex]
+\hline
+1 & NC & & & & &\\[0.5ex] 
+\hline
+1 & NP & & & & & \\[0.5ex]
+\hline
+1 & Adv & & & & & \\[0.5ex]
+\hline
+1 & Verbe & & & & & \\[0.5ex]
+\hline
+2 & Adj & & & & & \\[0.5ex]
+\hline
+2 & NC & & & & &\\[0.5ex] 
+\hline
+2 & NP & & & & & \\[0.5ex]
+\hline
+2 & Adv & & & & & \\[0.5ex]
+\hline
+2 & Verbe & & & & & \\[0.5ex]
+\hline
+\end{tabular}
+\caption{Analyse du processus}
+\label{table:nonlin}
+\end{table}
 
 
 
