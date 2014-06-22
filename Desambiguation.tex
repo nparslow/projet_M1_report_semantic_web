@@ -6,6 +6,35 @@ en contexte. Cela consiste à calculer la distance entre, d'une part, une
 phrase entrée par l'utilisateur et, d'autre part, chaque définition du mot à
 disambiguïser. Le programme va alors calculer un vector pour chaque couple
 (phrase / définition) et la définition renvoyée sera celle ayant le vecteur le
-plus important. 
+plus important.
+
+
 
 \subsection{Evaluation}
+
+L'évaluation de ce programme a été faite en deux temps. Tout d'abord 
+l'évaluation grâce au corpus RomansEval et ensuite à l'aide d'un corpus plus 
+petit que nous avons nous-même réalisé.
+
+\subsubsection{RomansEval}
+
+Le RomansEval est un corpus constitué d'environ 45000 phrases. De plus certains 
+mots présents dans ce corpus sont ambigus. Ces mots sont regroupés dans un 
+fichier HTML qui contient en plus leurs différents définitions. Et pour 
+finir, ils sont aussi répertoriés dans un fichier de référence avec diverses 
+informations supplémentaires telles que:
+
+\begin{enumerate}
+ \item la catégorie syntaxique du mot
+ \item son lemme
+ \item le numero de la phrase dans laquelle il apparait
+ \item l'occurrence présente dans la phrase
+ \item les différents votes des personnes qui ont fait ce corpus
+ \item la définition qui eu le nombre de voix le plus élevé
+ \end{enumerate}
+
+
+ 
+\subsubsection{Notre corpus}
+
+
