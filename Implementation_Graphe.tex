@@ -10,51 +10,7 @@ graphe. Etant donné le grand nombre d'entrées dans les dictionnaires, il y a u
 avantage clair d'utiliser les matrices sparses, qui permettent de stocker plus 
 efficacement un graphe qui contient de nombreux sommets et peu d'arêtes.
 
-\subsection{Simplification de la structure}
-En pratique, il est possible de surpasser d'un grand nombre de nœuds 
-intermédiaires dans l'hiérarchie en attribuant une arête directe entre une paire 
-de mots dont le poids serait l'addition de toutes les valeurs des liens qui 
-constituent le chemin entre les deux mots. Le choix des sommets est un compromis 
-entre mettre le plus d'informations possible dans le graphe et veiller à la 
-non-explosion de la taille du graphe. Ceci n'est que possible parce que dans les 
-tâches effectuées (détaillés dans la partie XXX), nous n'aurons jamais besoin 
-d'extraire ces nœuds intermédiaires, même si nous souhaitons tenir compte de 
-leur présence.
 
-Ainsi, l'entrée dans \hyperref[fig:banane_full]{Figure~\ref*{fig:banane_full}} 
-est simplifiée en l'entrée dans 
-\hyperref[fig:banane_simple]{Figure~\ref*{fig:banane_simple}}:
-
-\begin{figure}
-\centering
-\parbox{5cm}{
-\def\svgscale{0.5}
-\input{entry_banane_full.pdf_tex}
-\caption{}
-\label{fig:banane_full}}
-\qquad
-\begin{minipage}{5cm}
-\def\svgscale{0.5}
-\input{entry_banane_simple.pdf_tex}
-\caption{}
-\label{fig:banane_simple}
-\end{minipage}
-\end{figure}
-
-Notons que nous préservons deux niveaux d'hiérarchie pour le mot d'entrée : un 
-contenant le mot seul et l'autre contenant aussi sa catégorie syntaxique. Ceci 
-est un moyen d'assurer à ce que le mot soit trouvable dans le réseau sans devoir 
-spécifier une catégorie syntaxique particulière, tout en permettant de faire la 
-distinction entre plusieurs catégories syntaxiques pour un mot donné. Chaque mot 
-taggé à l'intérieur d'une entrée est ainsi lié à une version non-taggée qui 
-représente le niveau 'entry' de ce mot, même s'il n'existe pas comme entrée dans 
-le dictionnaire de départ.
-
-Le résultats est un graphe qui contient deux sortes de nœuds des mots non-taggés 
-(correspondant au niveau entry' et des mots non-taggés (correspondant au niveau 
-'pos').
-
-[IMAGE plein d'arêtes].
 
 \subsection{La création du graphe}
 Comme mentionné précedemment, le graphe lui-même est implementé en forme de 
