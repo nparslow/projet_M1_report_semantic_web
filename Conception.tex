@@ -2,7 +2,25 @@
 
 \subsection{Reseau Sémantique}
 
-Motivation
+L'ambiguité inhérent des langues humaines est un grand défi pour le traitement automatique
+de langue naturelle. En linguistique, même s'il y a beaucoup d'avances dans la
+désambiguisation syntaxique, l'ambiguité sémantique reste une tâche extrèment difficile.
+Un supercomputer Watson de IBM a réussi a gagné a Jeopardy avec toute sa
+puissance mais sans eviter de faire des fautes simples. En plus, la répresentation
+sémantique logique n'est toujours pas au point de résoudre des tâches qui ont
+besoin des liens moins concrète ou plus flous, telles que
+\begin{itemize}
+\item la désambiguïsation lexicale (Word Sense Disambiguation)
+\item la recherche d'information (par exemple sur la toile ou dans une bibliothèque)
+\item la catégorisation de documents
+\item le résumé automatique de texte
+\item la traduction automatique
+\end{itemize}
+L'idée le plus populaire pour résoudre ses difficultés est l'utilisation d'un réseau
+sémantique qui donne l'avantage de pouvoir répresenter tous les connections taxonomiques
+ensembles en une seule entité. Cette simplication n'est pas sans coût, en particulier
+la répresentation des liens logiques telles que la négation et la disjonction 
+et en plus connaissances non-taxonomique sont particulièrement difficile à capter.
 
 L'idée de base pour un reseau semantique est de construire un graphe avec
 les concepts pour noeuds et les liens entre les concepts comme arrêts.
