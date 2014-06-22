@@ -11,6 +11,26 @@ définitions, des exemples, des synonymes et des informations grammaticales. Le
 wiktionnaire contient en plus d'autres relations sémantiques telles que 
 l'antonymie, l'hyperonymie et l’hyponymie.
 
+En termes de style, les deux dictionnaires sont très différents. 
+
+Le Wiktionnaire est une ressource libre qui a comme objectif de décrire tous les mots dans toutes les langues. C'est une ressource participative qui peut donc être éditée par tout le monde. Les informations sont très structurée et destinée à un format informatique, malgré le fait que la ressource soit ouvert à l'édition par tout le monde. Il contient un très grand nombre termes, anciens comme nouveaux et aussi des formes fléchies.
+
+Le Littré est inspiré du dictionnaire d'Emile Littré du dix-neuvième siècle et contient de nombreuses exemples et de citations littéraires. Le dictionnaire, n'étant pas destiné au départ à un format en-ligne, est moins structuré en termes des informations contenues que le Wiktionnaire et contient aussi moins de termes en général. Les informations contenues sont destinées à un approfondissent des connaissances, ce qui est reflété parfois dans la manière très précise de décrire une entrée, jusqu'à sa catégorie syntaxique. Par exemple, l'entrée \lq{F}\rq{} a l'en-tête suivante (contenant sa catégorie syntaxique):
+
+\begin{framed}
+\xml{entree terme="F"}\newline
+\xml{entete}\newline
+	\xml{prononciation}
+èf, ou, suivant la manière moderne d'épeler, fe 
+\xml{/prononciation}
+	\xml{nature} s. f. quand on prononce cette lettre èf, une petite f, et s. m. quand on la prononce fe, un f majuscule. \xml{/nature}\newline
+\xml{/entete}
+\end{framed}
+
+Ceci pose des difficultés pour notre traitement automatique des données, qui doivent être prise en compte lors du pré-traitement.
+
+Des extraits des deux dictionnaires se trouvent dans l'annexe. ([REF])
+
 \subsection{Statistiques}
 
 NOMBRE d'ENTREES
