@@ -2,11 +2,20 @@
 \subsection{Programme}
 
 La deuxièmme tâche que nous nous sommes donnée est la désambiguisation des mots
-en contexte. Cela consiste à calculer la distance entre, d'une part, une
-phrase entrée par l'utilisateur et, d'autre part, chaque définition du mot à
-disambiguïser. Le programme va alors calculer un vector pour chaque couple
-(phrase / définition) et la définition renvoyée sera celle ayant le vecteur le
-plus important.
+en contexte. Cela consiste à calculer la distance entre, d'une 
+part, une phrase entrée par l'utilisateur et, d'autre part, chaque définition 
+du mot à disambiguïser. Le programme va alors calculer un vector pour chaque 
+couple (phrase / définition) et la définition renvoyée sera celle ayant le 
+vecteur le plus important.
+Dans un premier temps on tagge puis lemmatise la phrase et les définitions pour 
+qu'ils soient en adéquation avec nos données.
+
+Ensuite, on peut calculer la distance entre la phrase et une définition, pour 
+se faire, il y a deux étapes: la création des veteurs et le calcul de la 
+distance euclidéenne entre ces vecteurs.
+
+\subsection{création des vecteurs}
+
 
 
 
@@ -40,10 +49,9 @@ dictionnaires python. Ensuite le fichier de référence est lu ligne par ligne
 ce qui permet de connaître chaque occurrence, son contexte et les définitions 
 liées à ce lemme.
 
-Malheureusement pour nous, ce corpus étant beaucoup trop important, nous 
-n'avons pas pu nous servir de toutes les données qu'il contient. Pour chaque 
-lemme nous avons analysé les 20 premières occurrences pour avoir un score 
-d'exactitude le plus précis possible.
+Le corpus étant beaucoup trop important, nous n'avons pas pu nous servir de 
+toutes les données qu'il contient. Pour chaque lemme nous avons analysé les 20 
+premières occurrences pour avoir un score d'exactitude le plus précis possible.
 
 Le score obtenu est un peu différent selon la catégorie observée:
 
@@ -63,7 +71,5 @@ léger.' et `Qui est empreint de froideur, dépourvu de cordialité.' sont deux
 défintions qui utilisent plusieurs mots identiques ou très similaires. Dans ce 
 cas-là l'être humain comprend bien que la première définition désigne plutôt 
 une sensation physique tandis que la deuxième désigne un sentimentn resenti.
-
-\subsubsection{Notre corpus}
 
 
