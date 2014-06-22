@@ -18,11 +18,12 @@ petit que nous avons nous-même réalisé.
 
 \subsubsection{RomansEval}
 
-Le RomansEval est un corpus constitué d'environ 45000 phrases. De plus certains 
-mots présents dans ce corpus sont ambigus. Ces mots sont regroupés dans un 
-fichier HTML qui contient en plus leurs différents définitions. Et pour 
-finir, ils sont aussi répertoriés dans un fichier de référence avec diverses 
-informations supplémentaires telles que:
+Le RomansEval est un corpus constitué d'environ 45000 phrases. De plus, 
+certains mots présents dans ce corpus sont ambigus. Ces mots sont regroupés dans 
+trois fichiers HTML (un fichier par catégorie syntaxique : Adj, N, V) qui 
+contiennet en plus leurs différents définitions. Et pour finir, ils sont aussi 
+répertoriés dans un fichier de référence avec diverses informations 
+supplémentaires telles que :
 
 \begin{enumerate}
  \item la catégorie syntaxique du mot
@@ -33,8 +34,33 @@ informations supplémentaires telles que:
  \item la définition qui eu le nombre de voix le plus élevé
  \end{enumerate}
 
+Pour réaliser notre évaluation, nous avons mis au point un script qui, pour 
+chaque fichier HTML, le lit et récupère les informations pertinentes dans un 
+dictionnaires python. Ensuite le fichier de référence est lu ligne par ligne 
+ce qui permet de connaître chaque occurrence, son contexte et les définitions 
+liées à ce lemme.
 
- 
+Malheureusement pour nous, ce corpus étant beaucoup trop important, nous 
+n'avons pas pu nous servir de toutes les données qu'il contient. Pour chaque 
+lemme nous avons analysé les 20 premières occurrences pour avoir un score 
+d'exactitude le plus précis possible.
+
+Le score obtenu est un peu différent selon la catégorie observée:
+
+\begin{enumerate}
+ \item pour les adjectifs, le score d'exactitude est de 20%
+ \item pour les noms, le score d'exactitude est de 15%
+ \item pour les verbes, le score d'exactitude est de 25%
+\end{enumerate}
+
+Nous avons conscience que ces score sont mauvais mais celà peut en partie 
+s'expliquer en étudiant de plus près les définitions. En effet, si l'on regarde 
+par exemple le lemme FRAIS. Il possède, dans le RomansEval, huit définitions 
+différentes. Et parmi ces huit définitions certaines sont très proches et la 
+différence entre elles est difficile à percevoir, même pour un être humain. Par 
+exemple : `Qui est légèrement froid ou qui procure une sensation de froid 
+léger.' et `Qui est empreint de froideur, dépourvu de cordialité.'
+
 \subsubsection{Notre corpus}
 
 
