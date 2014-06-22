@@ -1,0 +1,192 @@
+\section{La pondération des relations}
+
+Pour injecter plus de sophistication dans le réseau, la distance entre deux mots 
+ne se limite pas au nombre d'arêtes dans le chemin. Les arêtes sont pondérées 
+selon le type de nœud sortant et entrant afin de distinguer entre les relations 
+différentes qui peuvent exister à différents endroits de l'entrée. Contrairement 
+aux réseaux sémantiques plus sophistiqués tels que WordNet 
+\hyperref[bib:wordnet]{[~\ref*{bib:wordnet}]}, qui encodent des relations typées 
+spécifiques, notre réseau se base sur un principe plus simple de pondération, 
+avec des valeurs réelles assignées par rapport à l'emplacement des mots dans 
+l'entrée du dictionnaire.
+
+Les poids des arêtes font partie des paramètres du réseau et sont conservés 
+dans un fichier de configuration externe (weight.config), les valeurs étant 
+choisies pour optimiser le réseau pour une tâche particulière. L'optimisation 
+sera discutée dans la partie [XXX]. Il existe un total de 42 liens différent 
+[CHECK] avec un poids différent entre zéro et infinité, un lien de 0 étant un 
+lien non-existant dans le graphe.
+
+Ci-dessus un extrait de ce fichier, qui se trouve dans l'annexe [REF] :
+
+\begin{framed}
+entry2pos = 0.01\newline
+pos2entry = 0.01\newline
+pos2sense = 0.01\newline
+sense2pos = 0.01\newline
+pos2syn = 0.01\newline
+syn2pos = 0.01\newline
+...\newline
+sense2subsense = 0.001\newline
+subsense2sense = 0.001\newline
+subsense2deftext = 0.00001\newline
+deftext2subsense = 0.00001\newline
+subsense2semantic = 0\newline
+\end{framed}
+
+En plus de ces paramètres basés uniquement sur la structure des entrées, 
+d'autres paramètres sont utilisés pour faire ressortir des informations 
+lexicales en plus de ces relations déjà trouvées. Ces paramètres se trouvent 
+dans un deuxième fichier de configuration, qui peut être modifié de la même 
+façon que le fichier de poids. La différence est que l'utilisateur peut 
+spécifier le type d'opération à effectuer sur le poids d'origine. Chaque 
+paramètre est écrit sur une seule ligne avec l'étape de la création du graphe à 
+laquelle le paramètre sera implémenté, ainsi que d'autres options utilisées pour 
+spécifier comment le paramètre peut être utilisé.
+
+Etant donné un mot x et un mot y, où x est le mot d'entrée et y le mot de sa 
+définition, le poids d'origine serait le poids spécifié entre un mot d'entrée et 
+sa définition (c'est-à-dire entry2pos + pos2sense + sense2subsense + 
+subsense2deftext). Ensuite ce poids peut être transformé de plusieurs façons:
+
+
+\subsection{En fonction des propriétés catégorielles}
+Pendant l'étape de préparation du graphe, avant la création de la matrice, les 
+poids sont traffiqués en fonction des propriétés catégorielles pour donner plus 
+ou moins de poids à certaines catégories. Les paramètres sont de la forme 
+suivante :
+    \begin{framed}
+        POS\_de\_y, POS\_de\_x, fichiers\_contextes, opération\_math, valeur
+    \end{framed}
+
+\subsubsection{Modification uniquement en fonction de la catégorie 
+syntaxique du mot y.}
+Ces paramètres servent à privilégier certaines catégories de mot par rapport à 
+d'autres, en supposant que certaines catégories sont plus utiles pour établir 
+des relations sémantiques.[XXX PARLER PLUS] Un paramètre est spécifié pour 
+chaque catégorie syntaxique afin d'établir des modifications relatives entre 
+catégories. Par exemple, pour la catégorie \lq{adjectif}\rq: \lq{prepare: Adj, 
+None, None, +, 0.6}\rq signifie que 0.6 est ajouté à tout noeud qui va vers un 
+mot de catégorie \lq{Adj}\rq.
+
+\subsubsection{Modification en fonction de la catégorie syntaxique du mot x, du 
+mot y et d'un fichier de contextes spécifiques.} 
+Jusqu'à présent le poids des relations a été fondé uniquement sur l'emplacement 
+des mots y dans l'entrée et de leurs catégories syntaxiques. Mais il est aussi 
+important d'analyser la structure des informations à l'intérieur des 
+définitions, puisque les définitions font preuve d'une régularité qui permet de 
+donner plus de poids à certains mots. Sans faire une analyse syntaxique complète 
+des définitions, nous visons à cibler certains mots qui apparaissent dans un 
+certain contexte afin de renforcer la relation entre le mot de l'entrée et ces 
+mots cibles. La forme du paramètre dans le fichier de configuration est la même 
+que pour les paramètres précédents, sauf que la deuxième option 
+lq{POS\_de\_x}\rq est spécifiée, ainsi que le chemin vers le fichier de 
+contextes légitimisants.
+\newline\newline
+Nous jugeons nécessaire de spécifier la catégorie syntaxique du mot x ainsi que 
+la catégorie du mot y parce que la forme de la définition dépend en grande 
+partie de la catégorie syntaxique du mot de l'entrée et la relation entre un 
+mot x de catégorie 'nom' et un mot y de catégorie \lq{nom}\rq n'est pas la même 
+relation que celle entre un mot x de catégorie \lq{nom}\rq et un mot y de 
+catégorie \lq{verbe}\rq.
+\newline\newline
+Par exemple, pour un mot x de catégorie \lq{adverbe}\rq, il pourrait être 
+pertinent de renforcer le lien entre x et y, si y est un adjectif qui apparaît 
+dans le contexte \lq{d'une manière mot\_y}\rq.
+
+\underline{Syntaxe}\newline
+Nous définissons une syntaxe particulière pour représenter les contextes 
+légitimisants. En général ce sont une séquence de mots précédant et/ou suivant 
+le mot y en question, qui signale que ce mot doit être mis en valeur.\newline
+
+\begin{itemize}
+    \item{Les contextes précédents et suivants sont des séquences de mots. Ces 
+    séquences peuvent contenir soit des mots-formes, soit des lemmes, ce qui 
+    permet plus de flexibilité dans la rédaction des règles et de ne pas devoir 
+    expliciter toutes les combinaisons de formes fléchies possibles.}
+
+    \item{\# représente la position du mot y, ce qui permet de spécifier le 
+    contexte précédent et le contexte suivant du mot.}
+
+    \item{Les symboles \string^ et \$ représentent respectivement le début et 
+    la fin de la phrase}
+
+    \item{Un chiffre indique le nombre maximum de mots qui peuvent apparaître à 
+    une position donnée, sans devoir spécifier la forme ou le lemme de ces mots. 
+    Notez que ces mots ne peuvent pas être un signe de ponctuation ou de la 
+    même catégorie syntaxique que le mot y. Ceci fait en sorte que ce soit 
+    le premier mot de la catégorie recherchée qui est renforcée par ce 
+    contexte.}
+
+\end{itemize}
+
+Par exemple, dans l'entrée du mot \lq{langoureusement}\rq, la définition 
+\lq{d'une manière langoureuse}\rq et le contexte légitimisant \lq{de une manière 
+\#}\rq permettrait de renforcer la relation entre \lq langoureusement\rq et \lq 
+langoureux\rq, ce dernier apparaissant dans la position spécifiée par \#. Dans 
+cet exemple, il n'y a pas de contexte suivant spécifié (puisqu'aucun mot ne suit 
+le \#) et ceci est le cas dans la plupart des contextes, où le contexte 
+précédent est le plus important. Pour simplifier les contextes, nous permettons 
+de ne pas exprimer le \# et dans ce cas, la séquence de mots est considérée 
+comme la séquence précédente du mot y. Pour reprendre l'exemple précédent, le 
+contexte \lq{de une manière \#}\rq peut également être exprimé \lq{de une 
+manière}\rq. Notons que si un contexte suivant est explicité, le \# est 
+nécessaire.
+
+Ci-dessous quelques exemples de contextes pour une paire de catégories pour les 
+mots x et y:
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{|p{1cm}|p{1cm}|p{5.5cm}|p{8cm}|}
+\hline
+POS de x & POS de y & Contexte & Description\\[0.5ex]
+\hline
+Adj & Adj & . \# . & Un adjectif entre deux points \\
+Nom & Nom & \string^ \# ,  & Un nom au début de la définition, suivi d'une 
+virgule \\
+Nom & Nom & synonyme de & Un nom qui suit la séquence \lq{synonyme de}\rq \\
+Adj & Verbe & en parlant de une personne qui 3 & Un verbe qui suit la séquence 
+\lq{en parlant de une personne qui}\rq avec un maximum de 3 mots intervenants 
+qui ne sont pas de catégorie PONCT ou V \\
+Adj & Nom & qui a des rapports avec 2 & Un nom qui suit la séquence \lq{qui a 
+des rapports avec}\rq avec un maximum de 2 mots intervenants qui ne sont pas de 
+catégorie PONCT ou N \\ [1ex]
+\hline
+\end{tabular}
+\caption{Quelques exemples de contextes légitimisants}
+\label{table:nonlin}
+\end{table}
+
+
+Les contextes ont été choisis en analysant les entrées de dictionnaire pour 
+chaque type de catégorie syntaxique et en remarquant les régularités. Quelques 
+contextes sont applicables pour un nombre de catégories différentes, par exemple 
+\lq{synonyme de}\rq, \lq{hyperonyme de}\rq, et d'autres sont plus spécifiques 
+aux contextes.
+
+Chaque contexte est un tuple contenant une expression régulière pour le contexte 
+précédent et une expression régulière pour le contexte suivant.
+
+Les séquences sont transformées de la façon suivante:
+\begin{itemize}
+    \item{Toute la ligne est divisée en deux sur le symbole \#. S'il n'existe 
+    pas de symbole \#, toute la séquence est le contexte précédent est le 
+    contexte suivant est null.}
+    \item{Pour chaque contexte (précédent et suivant), l'expression régulière 
+    est générée:}
+    \begin{itemize}
+        \item{tout caractère qui est un caractère spécial pour les expressions 
+        régulières doit être échappé (sauf \^ et \$ qui retiennent leur 
+	propriété de caractères spéciaux)}
+        \item{tout mot est converti en une entité taggée et lemmatisée tel que 
+        le mot peut être considéré comme le mot-forme ou le lemme du mot. Par 
+	exemple \lq{mot}\rq  est transformé en ((mot/[\string^ /]+?/[\string^ 
+	/]+?)|([\string^ /]+?/[\string^ /]+?/mot)) }
+    \end{itemize}
+\end{itemize}
+
+\underline{L'implémentation en Python}\newline
+La correspondance entre les contextes d'un mot à l'intérieur d'une définition et 
+les contextes légitimisant se fait par des expressions régulières, qui sont 
+générées à partir des contextes des fichiers.

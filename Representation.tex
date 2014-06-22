@@ -1,0 +1,15 @@
+\section{La représentation en graphe}
+
+Les fichiers XML sont facilement transférables en représentation en graphe, 
+puisqu'ils continennent une hiérarchie d'entrées. En principe chaque niveau de 
+l'hiérarchie est représenté par un nœud différent avec des arcs qui lie chaque 
+nœud à ses fils dans l'hiérarchie, comme dans 
+\hyperref[fig:XMLhierarchy]{Figure~\ref*{fig:XMLhierarchy}}. Cette 
+représentation a l'avantage de préserver la structure hiérarchique d'origine.
+
+En plus des arêtes descendantes qui existent dans le schéma 
+\hyperref[fig:XMLhierarchy]{Figure~\ref*{fig:XMLhierarchy}}, nous établissons 
+des arêtes montantes, afin de retrouver facilement la relation entre un mot qui 
+apparaît dans une entrée et le lexème de l'entrée. Les poids sur ces arêtes ne 
+sont pas les mêmes que les arêtes descendantes afin de retrouver une différence 
+dans ces relations.

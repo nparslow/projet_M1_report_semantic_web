@@ -1,0 +1,80 @@
+\section{Pré-traitement}
+
+Dans le but de pouvoir procéder à un traitement homogène des deux dictionnaires, 
+une normalisation des deux formats était nécessaire. Ce pré-traitement a permis 
+à la fois de supprimer certaines informations qui n'étaient pas utilisée par la 
+suite et de convertir les balises et leur contenu en un format plus convenable 
+pour notre traitement. Nous réunissons les deux structures dans un seul type de 
+fichier XML avec les balises suivantes:
+
+    \begin{itemize}
+        \item[$\circ$] entry : un mot du dictionnaire (lexème)
+        \item[$\circ$] pos : la catégorie syntaxique (il peut y en avoir 
+plusieurs par lexème)
+        \item[$\circ$] sense : le niveau hiérarchique représentant plusieurs 
+        sens d'un même mot
+        \item[$\circ$] subsense : le niveau hiérarchique représentant plusieurs 
+        sous-sens d'un même sens global
+        \item[$\circ$] def-text : le texte d'une défintion
+        \item[$\circ$] semantic : l'emploi sémantique d'un mot (figuratif, 
+        absolu etc.)
+        \item[$\circ$] register : le registre du mot (familier, vulgaire, 
+        soutenu etc.)
+        \item[$\circ$] domain : le domaine sémantique du mot (géographie, 
+        biologie, culinaire etc.)
+        \item[$\circ$] refs : des références vers d'autres entrées lexicales
+        \item[$\circ$] examples : des phrases exemples contenant le mot de 
+        l'entrée lexicale
+        \item[$\circ$] synonyms : synonymes de du mot de l'entrée
+        \item[$\circ$] antonyms : antonymes de du mot de l'entrée
+        \item[$\circ$] hyperonyms : hyperymes de du mot de l'entrée
+        \item[$\circ$] hyponyms : hyponymes de du mot de l'entrée
+    \end{itemize}
+\bigskip
+
+La DTD des fichiers XML normalisés se trouve dans l'appendice 
+\hyperref[App:dtddico]{~\ref*{App:dtddico}}, 
+avec les scripts de normalisation 
+\hyperref[App:normlittre]{~\ref*{App:normlittre}} et 
+\hyperref[App:normwiki]{~\ref*{App:normwiki}}. 
+\hyperref[fig:XMLhierarchy]{Figure~\ref*{fig:XMLhierarchy}} illustre 
+l'hiérarchie des balises, qui correspond aussi à la structure théorique du 
+réseau.
+
+\begin{figure}[!ht]
+\centering
+\def\svgwidth{\columnwidth}
+\input{schema.pdf_tex}
+\caption{L'hiérarchie des entrées définie pour les dictionnaires en XML}
+\label{fig:XMLhierarchy}
+\end{figure}
+
+
+De légères différences existent entre les structures des deux dictionnaires. 
+Tandis que la plupart des informations du Wiktionnaire sont localisées au niveau 
+du 'sense', la plupart des informations du Littré sont localisées au niveau du 
+'subsense', ce qui ne pose aucun problème pour la construction des deux réseaux.
+\newline
+\newline
+En plus de la restructuration des fichiers XML, les dictionnaires ont été 
+nettoyés pour convenir à nos besoins. Certaines balises contiennent trop 
+d'informations ou des informations non-pertinentes. Par exemple, les balises des 
+commentaires pour le Littré ne contiennent pas de contenu exploitable et les 
+citations des textes anciens des mots vieillis qui risquent d'ajouter du bruit 
+dans le réseau résultant. Les entrées sont ainsi réduites au schéma ci-dessus 
+(\hyperref[fig:XMLhierarchy]{Figure~\ref*{fig:XMLhierarchy}}). Le Littré en 
+particulier nécessite une étape importante de nettoyage, puisque des erreurs 
+existent dans le balisage des données et un manque d'homogénéité dans la 
+structuration des entrées risque de perturber la manière dont laquelle les 
+relations sont établies entre les éléments qu'elles contiennent. Les catégories 
+syntaxiques utilisées ne sont pas d'une liste énumérable et contiennent des 
+descriptions plutôt littéraires. Cette étape de normalisation consistait aussi à 
+traduire ces catégories syntaxiques en une liste plus formelle et identifiable.
+
+Les définitions, exemples et autres informations dans les entrées étaient 
+ensuite taggés et lemmatisés en utilisant l'outil MElt 
+(\hyperref[bib:melt]{[~\ref*{bib:melt}]}). Cette étape est importante pour 
+pouvoir relier les mots fléchis des définitions avec leurs lemmes tels qu'ils 
+apparaissent dans les entrées et pour savoir de quelle catégorie syntaxique il 
+s'agit. Le script XXX qui sert à tagger et lemmatiser les documents se trouvent 
+dans l'annexe \hyperref[App:tag]{[~\ref*{App:tag}]}.

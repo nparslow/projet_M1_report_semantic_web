@@ -1,0 +1,56 @@
+\section{La Conception du Graphe}
+
+La construction d'un réseau sémantique à partir d'un dictionnaire est possible 
+grâceà la structure des dictionnaires qui permet de faire ressortir des liens 
+sémantiques.La structure en sens, sous-sens, définitions, et exemples, parmi 
+d'autres informations,mais aussi la structure interne des définitions contient 
+une régularité qu'il estimportant d'exploiter au maximum. Nous tenons donc à 
+conserver le plus possible cettestructure dans la transformation de dictionnaire 
+en graphe. Un graphe est définiformellement comme un ensemble de sommets et un 
+ensemble d'arcs qui relient une pairede sommets.
+
+\[
+G = <S, A>
+\]
+
+Pour représenter un dictionnaire par un graphe, nous considérons que les 
+sommets peuvent être les mots individuels du dictionnaire ou même les niveaux 
+intermédiaires de la structure tels que 'exemple', 'définition', 'synonyme', 
+'antonyme' etc. Les arcs sont alors les liens qui lient les différents éléments 
+d'une entrée de dictionnaire et permettraient de trouver un lien entre un 
+lexème donné et la manière dont il est décrit dans son entrée du dictionnaire.
+
+\subsection{Remarques sur le vocabulaire}
+Nous appelons 'mot' toute unité minimale du lexique. Un mot peut être
+soitfléchi, soit non-fléchi et par défaut nous faisons référence aux mots 
+non-fléchis sous leur forme de dictionnaire. Par principe, nous restreignons le 
+réseau aux lemmes, mais il est possible qu'il y apparaît des formes fléchies en 
+cas de non-identification du lemme.
+
+Par 'entrée' de dictionnaire nous faisons référence à un groupe d'informations 
+(catégories syntaxiques, sens, définitions, exemples etc.) associées à un mot 
+donné. Par conséquent, le terme 'entrée' peut aussi être utilisé pour dénoter 
+le mot lui-même, et par extension les informations contenues pour ce mot donné.
+
+La relation sémantique de synonymie est définie entre deux termes de la même 
+catégorie de discours qui ont le même sens et qui peuvent donc être substitués 
+l'un pour l'autre sans modifier le sens de la phrase. Cette définition pose 
+évidemment des problèmes, surtout à cause du fait qu'il est toujours possible 
+de trouver une différence de sens ou d'usage entre deux mots malgré le fait 
+qu'ils soient habituellement classés en synonymes. Il est parfois souhaitable 
+de parler de proche-synonymes au lieu de synonymes tout court. Néanmois, 
+nous préférons utiliser le terme 'synonyme' pour parler de ces cas, sans 
+postuler de théorie sur les frontières de la synonymie. Par la suite, la 
+synonymie sera définie en termes de relations attestées dans des ressources 
+externes et nous nous reportons à ces références pour établir si deux mots sont 
+en relation de synonymie ou pas.
+
+De même pour les relations d'antonymie, d'hyperonymie et d'hyponymie. 
+L'antonymie est définie comme la relation entre deux mots à sens opposé. 
+L'hyperonymie entre un mot dont l'extension contient l'extension d'un autre mot 
+(par exemple, 'véhicule' est l'hypernym de 'voiture'). L'hyponymie est la 
+relation inverse d'hyperonymie, entre un mot dont l'extension est incluse dans 
+l'extension d'un autre (pour reprendre le même exemple, 'voiture' est un 
+hyponyme de 'véhicule').
+
+[AUTRES DEFINITIIONS...]

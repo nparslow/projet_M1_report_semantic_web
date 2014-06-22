@@ -1,0 +1,70 @@
+
+\documentclass[a4paper, 12pt]{article}
+\usepackage[a4paper,margin=0.9in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[frenchb]{babel}
+\usepackage{indentfirst}
+\usepackage{dirtree}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{framed}
+\usepackage{parskip}
+\usepackage{calc}
+\usepackage{subfig}
+\usepackage{hyperref}
+\usepackage[toc,page]{appendix}
+\usepackage{parskip}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{trees}
+
+\setlength{\parskip}{12pt}
+
+\title{Réseau Sémantique à partir d'un dictionnaire}
+\author{Bawden Rachel, Brogniez Caroline et Parslow Nicholas}
+\date{}
+
+\begin{document}
+\tikzstyle{every node}=[thick,anchor=west]
+\tikzstyle{selected}=[draw=red,fill=red!30]
+
+\tikzstyle{decision} = [diamond, draw, fill=blue!20, 
+    text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
+    text width=5em, text centered, rounded corners, minimum height=4em]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=3cm,
+    minimum height=2em]
+
+\maketitle
+
+\input{./Introduction.tex}
+
+\input{./Conception.tex}
+
+\input{./Structure_Dictionaire.tex}
+
+\input{./Pretraitment.tex}
+
+\input{./Representation.tex}
+
+\input{./Ponderation.tex}
+
+\input{./Creation_Graphe.tex}
+
+\input{./Synonymes.tex}
+
+\input{./Desambiguation.tex}
+
+\input{./Resolution_Mots_Croises.tex}
+
+\input{./Conclusion.tex}
+
+\input{./Appendix.tex}
+
+\input{./Bibliography.tex}
+
+\end{document}
