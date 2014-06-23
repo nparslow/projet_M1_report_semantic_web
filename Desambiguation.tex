@@ -65,24 +65,45 @@ ce qui permet de connaître chaque occurrence, son contexte et les définitions
 liées à ce lemme.
 
 Le corpus étant beaucoup trop important, nous n'avons pas pu nous servir de 
-toutes les données qu'il contient. Pour chaque lemme nous avons analysé les 20 
-premières occurrences pour avoir un score d'exactitude le plus précis possible.
+toutes les données qu'il contient. Pour chaque lemme nous avons analysé les 5 
+premières occurrences de chaque mot pour avoir un score d'exactitude le plus 
+précis possible dans le temps imparti.
+
+Pour avoir une baseline à laquelle comparer notre désambiguisateur nous avons 
+laancé, en même temps que notre calcul d'exactitude, un random qui choisit une 
+définition parmi celles disponibles.
 
 Le score obtenu est un peu différent selon la catégorie observée:
 
-\begin{enumerate}
- \item pour les adjectifs, le score d'exactitude est de 20%
- \item pour les noms, le score d'exactitude est de 15%
- \item pour les verbes, le score d'exactitude est de 25%
-\end{enumerate}
+\begin{itemize}
+ \item {Adjectifs:
+	\begin{itemize}
+	 \item Notre exactitude : 39,80 \%
+	 \item Exactitude de random : 14,29 \%
+	\end{itemize}
+	}
+ \item {Noms:
+ 	\begin{itemize}
+	 \item Notre exactitude : 22,64 \%
+	 \item Exactitude de random : 16,98 \%
+	\end{itemize}
+	}
+ \item {Verbes:
+ 	\begin{itemize}
+	 \item Notre exactitude : 39,80 \%
+	 \item Exactitude de random : 14,29 \%
+	\end{itemize}
+	}
+\end{itemize}
 
-Nous avons conscience que ces score sont mauvais mais celà peut en partie 
-s'expliquer en étudiant de plus près les définitions. En effet, si l'on regarde 
-par exemple le lemme FRAIS. Il possède, dans le RomansEval, huit définitions 
-différentes. Et parmi ces huit définitions certaines sont très proches et la 
-différence entre elles est difficile à percevoir, même pour un être humain. Par 
-exemple : `Qui est légèrement froid ou qui procure une sensation de froid 
-léger.' et `Qui est empreint de froideur, dépourvu de cordialité.' sont deux 
-défintions qui utilisent plusieurs mots identiques ou très similaires. Dans ce 
-cas-là l'être humain comprend bien que la première définition désigne plutôt 
-une sensation physique tandis que la deuxième désigne un sentimentn resenti.
+Nous avons conscience que ces scores ne sont pas le meilleurs possibles mais 
+celà peut en partie s'expliquer en étudiant de plus près les définitions. En 
+effet, si l'on regarde par exemple le lemme FRAIS. Il possède, dans le 
+RomansEval, huit définitions différentes. Et parmi ces huit définitions 
+certaines sont très proches et la différence entre elles est difficile à 
+percevoir, même pour un être humain. Par exemple : `Qui est légèrement froid ou 
+qui procure une sensation de froid léger.' et `Qui est empreint de froideur, 
+dépourvu de cordialité.' sont deux défintions qui utilisent plusieurs mots 
+identiques ou très similaires. Dans ce cas-là l'être humain comprend bien que la 
+première définition désigne plutôt une sensation physique tandis que la deuxième 
+désigne un sentiment resenti.
