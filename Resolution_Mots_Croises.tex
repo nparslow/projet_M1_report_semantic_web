@@ -16,8 +16,8 @@ Le processus suivi est donc séquentiel et peut être représenté par le schém
 
 \subsection{Les étapes de traitement}
 
-\subsubsection{Etape 1 : Identification de la catégorie syntaxique du mot cible}\label{sec:crossetape1}
-Les indices sont de petites séquences de mots qui sont très rarement des phrases complètes et bien formées. Ils correspondent souvent à un syntagme particulier et contiennent parfois des ambiguïtés de catégorie syntaxique dont il faut tenir compte. Il est aussi possible à cette étape d'identifier quelques marques de flexion qui peuvent indiquer la forme du mot cible. Le réseau sémantique ne contient a priori que des lemmes et donc il est important de garder ces indices flexionnels pour re-fléchir les mots candidats à l'étape 3 (Voir section~\ref{sec:crossetape3).  
+\subsubsection{Etape 1 : Identification de la catégorie syntaxique du mot cible}%\label{sec:crossetape1}
+Les indices sont de petites séquences de mots qui sont très rarement des phrases complètes et bien formées. Ils correspondent souvent à un syntagme particulier et contiennent parfois des ambiguïtés de catégorie syntaxique dont il faut tenir compte. Il est aussi possible à cette étape d'identifier quelques marques de flexion qui peuvent indiquer la forme du mot cible. Le réseau sémantique ne contient a priori que des lemmes et donc il est important de garder ces indices flexionnels pour re-fléchir les mots candidats à l'étape 3. %(Voir section~\ref{sec:crossetape3).  
 
 Un étiqueteur syntaxique automatique tel que MElt[\hyperref[bib:melt]{~\ref*{bib:melt}}] est peu adapté pour cette identification puisqu'il se base sur les probabilités pour renvoyer la séquence de tags la plus probable pour l'indice. Ceci signifie que le tag prédit peut ne pas correspondre à un des tags possibles pour un mot donné ou les ambiguïtés peuvent ne pas être trouvées. De plus, de tels étiqueteurs sont dépendants de leurs données d'entraînement, et les indices des mots croisés sont d'une forme très différente des données du French TreeBank sur lequel MElt a été entrainé. Nous choisissons donc de faire une analyse point à point des mots de l'indice afin de renvoyer toutes les possibilités catégorielles pour chaque mot. Le Lefff (Lexique des Formes Fléchies du Français)[\hyperref[bib:lefff]{~\ref*{bib:lefff}}] est utilisé pour retrouver toutes les catégories syntaxiques et marques flexionnelles de chaque mot. Cette méthode renvoie évidemment plus de séquences possibles de catégories syntaxiques que souhaitées et crée donc de l'ambiguïté artificielle. Cependant, c'est un moyen d'augmenter le rappel des résultats, même si la précision en souffre. Il est important pour nous de renvoyer le plus de mots candidats possibles et une erreur d'étiquetage syntaxique à cette étape peut significativement nuire les chances de trouver les bons candidats par la suite.
 
@@ -52,7 +52,7 @@ Les catégories syntaxiques sont retenues pour le parcours du réseau et les inf
 
 Remarque : Une particularité des indices est que parfois elles peuvent contenir plusieurs parties, séparées d'une virgule et qui représentent plusieurs sous-indices à l'intérieur de l'indice. Par exemple, un indice peut avoir la forme \lq{habillée, fringuée}\rq{} et dans ce cas, il est souhaitable de séparer cet indice en \lq{habillée}\rq{} et \lq{fringuée}\rq{} afin d'avoir la meilleure chance de trouver la catégorie voulue. Idéalement, ces deux parties devraient aussi correspondre en termes de catégorie syntaxique, ce qui signifie qu'il faudrait en théorie ne garder que les catégories cibles qui correspondent aux deux parties de l'indice. Par contre, nous optons pour le choix de garder toutes les catégories potentielles à partir des deux parties de l'indice pour nous assurer de la couverture maximale. 
 
-\subsubsection{Etape 2 : Recherche dans le graphe}\label{sec:crossetape2}
+\subsubsection{Etape 2 : Recherche dans le graphe}%\label{sec:crossetape2}
 
 Une fois que la catégorie syntaxique de la solution est ciblée (ou au moins réduite à une liste de catégories possibles), et les mots de l'indice sont lemmatisés, il est possible d'utiliser le réseau sémantique pour trouver les mots les plus proches à l'indice. Ici nous testons la première stratégie de recherche dans le graphe: l'algorithme de parcours en largeur décrit dans la partie [REF] pour renvoyer les k plus proches voisins de chaque lemme. Une extension serait d'implémenter aussi la recherche de la matrice complète détaillé dans la section [REF]. Le choix des plus proches candidats va dépendre de l'algorithme utilisé.
 
@@ -74,9 +74,9 @@ vec\_indice : \textless{a: 1, b: 2, c: 1, d: 4, e: 1}\textgreater
 
 Remarques sur les formes recherchées : les lemmes des mots de l'indice sont recherchés dans le réseau, suffixés de leurs catégories syntaxiques possibles, ce qui signfie qu'un mot qui est syntaxiquement ambigu sera recherché plusieurs fois. Si le lemme ne se trouve pas dans le Lefff, au lieu d'abandonner la recherche de ce mot, nous utilisons le mot-forme par défaut, en espérant que ce mot appartient au réseau (particulièrement important pour les noms propres par exemple).\footnote{Même si le réseau ne devraient pas contenir de formes fléchies, il est possible qu'il en contient à cause des erreurs de tagging, et donc nous exploitons cette faiblesse ici pour augmenter la chance de retrouver le plus de mots de l'indice possibles.}. Les catégories syntaxiques cibles sont celles obtenues à partir de la mini-grammaire est en cas de non-identification de catégorie, des candidats de toute catégorie seront recherchés.
 
-\subsubsection{Etape 3 : Conjugaison des lemmes obtenus}\label{sec:crossetape3}
+\subsubsection{Etape 3 : Conjugaison des lemmes obtenus}%\label{sec:crossetape3}
 
-Les résultats de la recherche du graphe sont (pour la plupart) des lemmes, qui sont à modifier pour correspondre à la forme du mot recherché. En utilisant l'ensemble de catégories et d'informations grammaticales obtenues lors de l'étape 1 (Voir section~\ref{sec:crossetape1}), cette étape cherche les formes fléchies correspondantes à chaque lemme et vérifie lesquelles correspondent aux informations grammaticales recherchées pour les mots candidats.
+Les résultats de la recherche du graphe sont (pour la plupart) des lemmes, qui sont à modifier pour correspondre à la forme du mot recherché. En utilisant l'ensemble de catégories et d'informations grammaticales obtenues lors de l'étape 1 [REF], cette étape cherche les formes fléchies correspondantes à chaque lemme et vérifie lesquelles correspondent aux informations grammaticales recherchées pour les mots candidats.
 
 La ressource utilisée est encore une fois le Lefff, avec pour chaque lemme qui y apparaît, ces catégories syntaxiques possibles et les formes fléchies associées. En connaissant les catégories syntaxiques possibles pour le mot cible (obtenues à l'étape 1), les formes fléchies du lemme sont triées en fonction de leur correspondance aux informations grammaticales aussi obtenues à l'étape 1. Si un trait grammatical (ex: 'nombre') est exprimé pour les flexions voulues, la forme fléchie sera retenue seulement si elle a la même valeur de trait (pourvu que ce trait soit exprimé).
 
@@ -98,7 +98,7 @@ et les formes suivantes retenues:
 consommée, alimentée, bue
 \end{framed}
 
-\subsubsection{Etape 4 : Filtrage selon les contraintes}\label{sec:crossetape4}
+\subsubsection{Etape 4 : Filtrage selon les contraintes}%\label{sec:crossetape4}
 
 La dernière étape filtre les candidats fléchis afin de ne renvoyer que les candidats qui se conforment aux contraintes de longueur de mot et de caractères déjà devinés. Il n'est pas possible de faire cette étape avant la conjugaison, puisque la conjugaison des lemmes peut avoir pour effet un changement dans la longueur du mot et des caractères qui y apparaîssent.
 

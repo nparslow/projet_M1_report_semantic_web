@@ -2,7 +2,7 @@
 
 Pour injecter plus de sophistication dans le réseau, la distance entre deux mots 
 ne se limite pas au nombre d'arêtes dans le chemin. Les arêtes sont pondérées 
-selon le type de nœud sortant et entrant afin de distinguer entre les relations 
+selon le type de nœud sortant et entrant afin de distinguer les relations 
 différentes qui peuvent exister à différents endroits de l'entrée. Contrairement 
 aux réseaux sémantiques plus sophistiqués tels que WordNet 
 \hyperref[bib:wordnet]{[~\ref*{bib:wordnet}]}, qui encodent des relations typées 
@@ -14,10 +14,10 @@ Les poids des arêtes font partie des paramètres du réseau et sont conservés
 dans un fichier de configuration externe (weight.config), les valeurs étant 
 choisies pour optimiser le réseau pour une tâche particulière. L'optimisation 
 sera discutée dans la partie [XXX]. Il existe un total de 42 liens différent 
-[CHECK] avec un poids différent entre 0 et 1, un lien de 0 étant un 
+avec un poids différent entre 0 et 1, un lien de 0 étant un 
 lien non-existant dans le graphe.
 
-Ci-dessus un extrait de ce fichier, qui se trouve dans l'annexe [REF] :
+Ci-dessus un exemple d'un extrait de ce fichier, qui se trouve dans l'annexe [REF] :
 
 \begin{framed}
 entry2pos = 0.01\newline
@@ -39,20 +39,18 @@ d'autres paramètres sont utilisés pour faire ressortir des informations
 lexicales en plus de ces relations déjà trouvées. Ces paramètres se trouvent 
 dans un deuxième fichier de configuration, qui peut être modifié de la même 
 façon que le fichier de poids. La différence est que l'utilisateur peut 
-spécifier le type d'opération à effectuer sur le poids d'origine. Chaque 
-paramètre est écrit sur une seule ligne avec l'étape de la création du graphe à 
+spécifier le type d'opération mathématique (ex: multiplication, addition etc.) à effectuer sur le poids d'origine. Chaque paramètre est écrit sur une seule ligne avec l'étape de la création du graphe à 
 laquelle le paramètre sera implémenté, ainsi que d'autres options utilisées pour 
 spécifier comment le paramètre peut être utilisé.
 
 Etant donné un mot x et un mot y, où x est le mot d'entrée et y le mot de sa 
-définition, le poids d'origine serait le poids spécifié entre un mot d'entrée et 
+définition: le poids original entre x et y serait le poids spécifié entre un mot d'entrée et 
 sa définition (c'est-à-dire entry2pos + pos2sense + sense2subsense + 
 subsense2deftext). Ensuite ce poids peut être transformé de plusieurs façons:
 
-
 \subsection{En fonction des propriétés catégorielles}
 Pendant l'étape de préparation du graphe, avant la création de la matrice, les 
-poids sont traffiqués en fonction des propriétés catégorielles pour donner plus 
+poids sont modifiés en fonction des propriétés catégorielles pour donner plus 
 ou moins de poids à certaines catégories. Les paramètres sont de la forme 
 suivante :
     \begin{framed}
@@ -82,21 +80,21 @@ mots cibles. La forme du paramètre dans le fichier de configuration est la mêm
 que pour les paramètres précédents, sauf que la deuxième option 
 lq{POS\_de\_x}\rq{} est spécifiée, ainsi que le chemin vers le fichier de 
 contextes légitimisants.
-\newline\newline
+
 Nous jugeons nécessaire de spécifier la catégorie syntaxique du mot x ainsi que 
-la catégorie du mot y parce que la forme de la définition dépend en grande 
-partie de la catégorie syntaxique du mot de l'entrée et la relation entre un 
-mot x de catégorie 'nom' et un mot y de catégorie \lq{nom}\rq n'est pas la même 
-relation que celle entre un mot x de catégorie \lq{nom}\rq et un mot y de 
+la catégorie du mot y. Ceci parce que la forme de la définition dépend en grande 
+partie de la catégorie syntaxique du mot de l'entrée. La relation entre un 
+mot x de catégorie \lq{nom}\rq{} et un mot y de catégorie \lq{nom}\rq{} n'est pas la même 
+relation que celle entre un mot x de catégorie \lq{nom}\rq{} et un mot y de 
 catégorie \lq{verbe}\rq.
-\newline\newline
+
 Par exemple, pour un mot x de catégorie \lq{adverbe}\rq, il pourrait être 
 pertinent de renforcer le lien entre x et y, si y est un adjectif qui apparaît 
 dans le contexte \lq{d'une manière mot\_y}\rq.
 
 \underline{Syntaxe}\newline
 Nous définissons une syntaxe particulière pour représenter les contextes 
-légitimisants. En général ce sont une séquence de mots précédant et/ou suivant 
+légitimisants. En général ce sont des séquences de mots précédant et/ou suivant 
 le mot y en question, qui signale que ce mot doit être mis en valeur.\newline
 
 \begin{itemize}
@@ -165,6 +163,13 @@ contextes sont applicables pour un nombre de catégories différentes, par exemp
 \lq{synonyme de}\rq, \lq{hyperonyme de}\rq, et d'autres sont plus spécifiques 
 aux contextes.
 
+Quelques abnormalités d'étiquetage syntaxique obligeait aussi de tenir compte de certaines formes qui peuvent paraître bizarre. Par exemple \lq{se dit des}\rq est étiqueté de la façon suivante:
+
+\begin{framed}
+se/ClR/clr dit/V/dire des/DET/un
+\end{framed}
+
+où on s'attendre à voir le lemme \lq{de}\rq{} pour \lq{des}\rq{}. Par conséquence, cette expression ne correpond pas au contexte \lq{se dit de}\rq{} et nous sommes obligés de spécifier une deuxième règle de la forme \lq{se dit des}\rq{} ou \lq{se dit un}\rq{} pour ces cas anormaux. Une autre possibilité est d'exprimer ces contextes avec le seul contexte \lq{se dit 1}\rq{} où la forme et le lemme du mot qui suit \lq{dit}\rq{} ne sont pas explicités.
 
 \underline{L'implémentation en Python}\newline
 La correspondance entre les contextes d'un mot à l'intérieur d'une définition et 
