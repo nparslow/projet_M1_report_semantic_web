@@ -184,7 +184,7 @@ Les séquences sont transformées de la façon suivante:
 \begin{itemize}
     \item{Toute la ligne est divisée en deux sur le symbole \#. S'il n'existe 
     pas de symbole \#, toute la séquence est le contexte précédent est le 
-    contexte suivant est null.}
+    contexte suivant est nul.}
     \item{Pour chaque contexte (précédent et suivant), l'expression régulière 
     est générée:}
     \begin{itemize}
@@ -198,10 +198,17 @@ Les séquences sont transformées de la façon suivante:
     \end{itemize}
 \end{itemize}
 
-[EXAMPLE]
+\begin{figure}
+\centering
+\parbox{17cm}{
+\def\svgscale{0.6}
+\input{regexExample.pdf_tex}
+\caption{La construction d'une expression régulière pour un contexte précédent d'un mot.}
+\label{fig:regex}}
+\end{figure}
 
 \subsection{Modification en fonction de l'emplacement du mot dans une définition}
-Ce paramètre permet de diminuer le poids des premiers mots d'une définition, en supposant que ce sont les termes les plus importants pour représenter l'entrée. La valeur à rentrer est le nombre de mots au début de la définition qui recevront une valeur diminuée. Le principe est de multiplier chaque arête dans le graphe par une certaine valeur multiplicative, qui commence très petite et augmente jusqu'à la valeur maximale de 2. Cette valeur maximale de 2 sera utilisée pour tous les mots qui suivent ces premiers mots mis en avant. L'accroissement de la valeur multiplicatrice suit une pente avant d'arriver à cette valeur maximale.
+Ce paramètre permet de diminuer le poids des premiers mots d'une définition, en supposant que ce sont les termes les plus importants pour représenter l'entrée. La valeur à rentrer est le nombre de mots au début de la définition qui recevront une valeur diminuée. Le principe est de multiplier chaque arête dans le graphe par une certaine valeur multiplicatrice, qui commence très petite et augmente jusqu'à la valeur maximale de 2. Cette valeur maximale de 2 sera utilisée pour tous les mots qui suivent ces premiers mots mis en avant. L'accroissement de la valeur multiplicatrice suit une pente avant d'arriver à cette valeur maximale.
 
 Par exemple, si le nombre de mots (n) mis en avant et de quatre, les quatre premiers mots seront multipliés par un plus petit nombre que les mots suivants. Le premier mot sera multiplé par la plus petite valeur, le deuxième mot par la deuxième plus petite valeur et ainsi de suite, jusqu'à la position n+1, où la multiplication reste constante à 2.
 
