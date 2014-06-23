@@ -152,7 +152,7 @@ le Littré avec le corpus WOLF. Le k qui donnait le meilleur score d'exactitude
 \begin{enumerate}
  \item {Littré :
 	\begin{enumerate}
-	 \item WOLF : 30 \% d'exactitude
+	 \item WOLF : 30,6 \% d'exactitude
 	 \item Crisco : 14,5 \% d'exactitude
 	\end{enumerate}
 	}
@@ -161,4 +161,9 @@ le Littré avec le corpus WOLF. Le k qui donnait le meilleur score d'exactitude
 	\item Crisco : 12,1 \% d'exactitude
 	}
 \end{enumerate}
+
+Ces score sont relativement bas mais cela peut s'expliquer par le fait que le 
+RelationFinder ne trouve pas que des synonymes mais aussi des antonymes, 
+hyperonymes, etc. Pour améliorer le résultat il suffirait donc d'ajouter 
+tout mot sémantiquement lié au mot que l'on évalue \dots 
 
