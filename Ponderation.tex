@@ -196,12 +196,19 @@ Les séquences sont transformées de la façon suivante:
 [EXAMPLE]
 
 \subsection{Modification en fonction de l'emplacement du mot dans une définition}
-Ce paramètre permet de diminuer le poids des premiers mots d'une définition, en supposant que ce sont les termes les plus importants pour représenter l'entrée. La valeur à rentrer est le nombre de poids au début de la définition qui recevront une valeur diminuée. Le principe est de multiplier chaque arête par une valeur qui commence très petit et augmente jusqu'à la valeur maximale de 2. Cette valeur maximale de 2 sera utilisée pour tous les mots qui suivent ces premiers mots mis en avant. L'accroissement de la valeur multiplicatrice suit une pente avant d'arriver à cette valeur maximale.
+Ce paramètre permet de diminuer le poids des premiers mots d'une définition, en supposant que ce sont les termes les plus importants pour représenter l'entrée. La valeur à rentrer est le nombre de mots au début de la définition qui recevront une valeur diminuée. Le principe est de multiplier chaque arête dans le graphe par une certaine valeur multiplicative, qui commence très petite et augmente jusqu'à la valeur maximale de 2. Cette valeur maximale de 2 sera utilisée pour tous les mots qui suivent ces premiers mots mis en avant. L'accroissement de la valeur multiplicatrice suit une pente avant d'arriver à cette valeur maximale.
 
-Par exemple, si le nombre de mots (n) mis en avant et de cinq, les cinq premiers mots seront multipliés par un plus petit nombre que les mots suivants. Le premier mot sera multiplé par la plus petite valeur, le deuxième mot par la deuxième plus petite valeur et ainsi de suite, jusqu'à la position n+1, où la multiplication reste constante à 2.
+Par exemple, si le nombre de mots (n) mis en avant et de quatre, les quatre premiers mots seront multipliés par un plus petit nombre que les mots suivants. Le premier mot sera multiplé par la plus petite valeur, le deuxième mot par la deuxième plus petite valeur et ainsi de suite, jusqu'à la position n+1, où la multiplication reste constante à 2.
 
 
-[IMAGE]
+\begin{figure}
+\centering
+\parbox{5cm}{
+\def\svgscale{1}
+\input{multiplyFirstWords.pdf_tex}
+\caption{L'accroissement de la valeur multiplicatrice jusqu'à la valeur maximale de 2 pour diminuer le poids des quatre premiers mots de la définition.}
+\label{fig:multiply}}
+\end{figure}
 
 \subsection{Modification en fonction de la catégorie syntaxique recherchée}
 Une autre option est de donner plus d'importance (en forme d'une valeur diminuée) aux mots qui sont de la même catégorie qu'un mot recherché dans le réseau. Ceci peut être important pour la recherche de synonymes, où nous souhaitons privilégier les relations entre mots de la même catégorie. Cette étape n'est pas implémentée dans la création de la matrice, mais plutôt pendant la recherche du graphe (Voir Parcours en largeur [REF]).
