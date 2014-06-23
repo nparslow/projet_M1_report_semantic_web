@@ -5,9 +5,8 @@
 
 Les fichiers XML sont facilement transférables en représentation en graphe, 
 puisqu'ils continennent une hiérarchie arborescente d'entrées.
-En principe chaque niveau de 
-l'hiérarchie est représenté par un nœud différent avec des arcs qui lie chaque 
-nœud à ses fils dans l'hiérarchie, comme dans 
+En principe chaque niveau de la hiérarchie est représenté par un nœud différent 
+avec des arcs qui lient chaque nœud à ses fils dans la hiérarchie, comme dans 
 \hyperref[fig:XMLhierarchy]{Figure~\ref*{fig:XMLhierarchy}}. Cette 
 représentation a l'avantage de préserver la structure hiérarchique d'origine.
 
@@ -16,19 +15,19 @@ En plus des arêtes descendantes qui existent dans le schéma
 des arêtes montantes, afin de retrouver facilement la relation entre un mot qui 
 apparaît dans une entrée et le lexème de l'entrée. Les poids sur ces arêtes ne 
 sont pas les mêmes que les arêtes descendantes afin de retrouver une différence 
-dans ces relations (Voir [REF] la pondération des relations pour plus de détails).
+dans ces relations (Voir la pondération des relations pour plus de détails).
 
 
 \subsubsection{Simplification de la structure}
 En pratique, il est possible de surpasser d'un grand nombre de nœuds 
-intermédiaires dans l'hiérarchie en attribuant une arête directe entre une paire 
-de mots dont le poids serait l'addition de toutes les valeurs des liens qui 
-constituent le chemin entre les deux mots. Le choix des sommets est un compromis 
-entre mettre le plus d'informations possible dans le graphe et veiller à la 
-non-explosion de la taille du graphe. Ceci n'est que possible parce que dans les 
-tâches effectuées (détaillés dans la partie XXX), nous n'aurons jamais besoin 
-d'extraire ces nœuds intermédiaires, même si nous souhaitons tenir compte de 
-leur présence.
+intermédiaires dans la hiérarchie en attribuant une arête directe entre une 
+paire de mots dont le poids serait l'addition de toutes les valeurs des liens 
+qui constituent le chemin entre les deux mots. Le choix des sommets est un 
+compromis entre mettre le plus d'informations possibles dans le graphe et 
+veiller à la non-explosion de la taille du graphe. Ceci n'est possible que 
+parce que dans les tâches effectuées (détaillés dans la partie XXX), nous 
+n'aurons jamais besoin d'extraire ces nœuds intermédiaires, même si nous 
+souhaitons tenir compte de leur présence.
 
 Ainsi, l'entrée dans \hyperref[fig:banane_full]{Figure~\ref*{fig:banane_full}} 
 est simplifiée en l'entrée dans 
@@ -50,31 +49,32 @@ est simplifiée en l'entrée dans
 \end{minipage}
 \end{figure}
 
-Notons que nous préservons deux niveaux d'hiérarchie pour le mot d'entrée : un 
+Notons que nous préservons deux niveaux de hiérarchie pour le mot d'entrée : un 
 contenant le mot seul et l'autre contenant aussi sa catégorie syntaxique. Ceci 
-est un moyen d'assurer à ce que le mot soit trouvable dans le réseau sans devoir 
+est un moyen d'assurer que le mot soit trouvable dans le réseau sans devoir 
 spécifier une catégorie syntaxique particulière, tout en permettant de faire la 
 distinction entre plusieurs catégories syntaxiques pour un mot donné. Chaque mot 
 taggé à l'intérieur d'une entrée est ainsi lié à une version non-taggée qui 
 représente le niveau 'entry' de ce mot, même s'il n'existe pas comme entrée dans 
 le dictionnaire de départ.
 
-Le résultat est donc un graphe qui contient deux sortes de nœuds: des mots non-taggés 
-(correspondant au niveau entry' et des mots non-taggés (correspondant au niveau 
-'pos'), avec des relations pondérées selon le lien établi entre les deux mots dans le dictionnaire.
+Le résultat est donc un graphe qui contient deux sortes de nœuds: des mots 
+non-taggés (correspondants au niveau entry') et des mots taggés (correspondant 
+au niveau 'pos'), avec des relations pondérées selon le lien établi entre les 
+deux mots dans le dictionnaire.
 
 [IMAGE plein d'arêtes].
 
 \subsection{Graphe minimaliste}
 
 Pour trouver les distances à partir des mots non-taggés ou des ensembles
-conceptuels, le premier graphe fonctionne bien. Par contre pour
-la désambiguisation, les noeuds de éntré et pos ne sont pas convenables.
-Tout d'abbord il faut au minimum, ajouter des noeuds correspondants aux senses
-différents. Si on ignore la différence entre sense et sous-sense (En principe
-cela devrait correspondre à celle de homonymie par rapport au polysemie,
-mais malheureusement ce n'est pas une distinction consistentamment appliqué
- dans les dictionnaires et alors difficile à incorporer), cela mène à un
+conceptuels, le premier graphe fonctionne bien. Par contre, pour
+la désambiguisation, les noeuds de entry et pos ne sont pas convenables.
+Tout d'abord, il faut au minimum, ajouter des noeuds correspondants aux sens
+différents. Si on ignore la différence entre sens et sous-sens (En principe
+cela devrait correspondre à celle de homonymie par rapport à polysemie,
+mais malheureusement ce n'est pas une distinction constemment appliquée
+dans les dictionnaires et alors difficile à incorporer), cela mène à un
 graphe à trois niveaux : entrée, pos et définition.
 
 Si on retient entrée le graphe va contenir une ambiguité inherente
@@ -98,12 +98,11 @@ dictionnaire (l'entrée) donc en pratique ce n'est pas un niveau utile.
 le graphe qui resulte ignore la phonétique, mais retient la syntaxe et
 l'ambiguité forte sémantiquement. L'ambiguité est forte parce que chaque
 définiton dans le dictionnaire contient des mots qui sont eux-mêmes
-ambigüs. Ce graphe est parfaitment bipartite.
+ambigüs. Ce graphe est parfaitment bipartie.
 et pour éviter la cross-contamination des liens sémantiques des
 définitions, il est orienté. 
 
-La forme du graphe se ressemble au graphe de la toile (ref section plus tot
-XXXXXXX), figure XXXX
+La forme du graphe ressemble au graphe d'internet.
 
 \begin{figure}
 \centering

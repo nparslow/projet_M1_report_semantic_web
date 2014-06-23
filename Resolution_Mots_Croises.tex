@@ -54,7 +54,14 @@ Remarque : Une particularité des indices est que parfois elles peuvent contenir
 
 \subsubsection{Etape 2 : Recherche dans le graphe}%\label{sec:crossetape2}
 
-Une fois que la catégorie syntaxique de la solution est ciblée (ou au moins réduite à une liste de catégories possibles), et les mots de l'indice sont lemmatisés, il est possible d'utiliser le réseau sémantique pour trouver les mots les plus proches à l'indice. Ici nous testons la première stratégie de recherche dans le graphe: l'algorithme de parcours en largeur décrit dans la partie [REF] pour renvoyer les k plus proches voisins de chaque lemme. Une extension serait d'implémenter aussi la recherche de la matrice complète détaillé dans la section [REF]. Le choix des plus proches candidats va dépendre de l'algorithme utilisé.
+Une fois que la catégorie syntaxique de la solution est ciblée (ou au moins 
+réduite à une liste de catégories possibles), et les mots de l'indice sont 
+lemmatisés, il est possible d'utiliser le réseau sémantique pour trouver les 
+mots les plus proches à l'indice. Ici nous testons la première stratégie de 
+recherche dans le graphe: l'algorithme de parcours en largeur pour renvoyer les 
+k plus proches voisins de chaque lemme. Une extension serait d'implémenter aussi 
+la recherche de la matrice complète. Le choix des plus proches candidats va 
+dépendre de l'algorithme utilisé.
 
 Un indice peut contenir plusieurs lemmes et avec le réseau sémantique, il est facile de renvoyer les voisins (avec leurs distances) d'un mot individuel. Pour le parcours en largeur il s'agit de parcourir le graphe jusquà'ce que les k plus proches voisins sont trouvés. Dans la matrice complète il est possible d'atteindre la liste complète des sommets du réseau avec leurs distances du mot recherché. 
 
@@ -76,7 +83,12 @@ Remarques sur les formes recherchées : les lemmes des mots de l'indice sont rec
 
 \subsubsection{Etape 3 : Conjugaison des lemmes obtenus}%\label{sec:crossetape3}
 
-Les résultats de la recherche du graphe sont (pour la plupart) des lemmes, qui sont à modifier pour correspondre à la forme du mot recherché. En utilisant l'ensemble de catégories et d'informations grammaticales obtenues lors de l'étape 1 [REF], cette étape cherche les formes fléchies correspondantes à chaque lemme et vérifie lesquelles correspondent aux informations grammaticales recherchées pour les mots candidats.
+Les résultats de la recherche du graphe sont (pour la plupart) des lemmes, qui
+sont à modifier pour correspondre à la forme du mot recherché. En utilisant 
+l'ensemble de catégories et d'informations grammaticales obtenues lors de 
+l'étape 1, cette étape cherche les formes fléchies correspondant à chaque 
+lemme et vérifie lesquelles correspondent aux informations grammaticales 
+recherchées pour les mots candidats.
 
 La ressource utilisée est encore une fois le Lefff, avec pour chaque lemme qui y apparaît, ces catégories syntaxiques possibles et les formes fléchies associées. En connaissant les catégories syntaxiques possibles pour le mot cible (obtenues à l'étape 1), les formes fléchies du lemme sont triées en fonction de leur correspondance aux informations grammaticales aussi obtenues à l'étape 1. Si un trait grammatical (ex: 'nombre') est exprimé pour les flexions voulues, la forme fléchie sera retenue seulement si elle a la même valeur de trait (pourvu que ce trait soit exprimé).
 
@@ -106,7 +118,11 @@ Souvent dans les outils d'aide de résolution de mots fléchés, cette étape es
 
 \subsection{L'interface graphique}
 
-L'interface graphique, implementée en python en utilisant les bibliothèques Tkinter [REF] et PMW [REF] sert à visualiser les résultats renvoyés aux différentes étapes du processus. Elle est mi-chemin entre un outil pour un joueur de mots croisés, qui ne s'intéresse qu'aux mots qui se conforment aux contraintes données et un outil plus pédagogue pour montrer les étapes du traitement.
+L'interface graphique, implementée en python en utilisant les bibliothèques 
+Tkinter et PMW sert à visualiser les résultats renvoyés aux différentes 
+étapes du processus. Elle est mi-chemin entre un outil pour un joueur de mots 
+croisés, qui ne s'intéresse qu'aux mots qui se conforment aux contraintes 
+données et un outil plus pédagogue pour montrer les étapes du traitement.
 
 \begin{center}
 \includegraphics{CrossWordInterface.png}
@@ -128,7 +144,23 @@ L'interface graphique, implementée en python en utilisant les bibliothèques Tk
 \subsection{Evaluation}
 Le système est difficilement évaluable contre d'autre systèmes de la même nature, parce qu'il n'existe pas de système d'évaluation standard et de scores comparatifs. Il existe beaucoup de systèmes qui ne se basent pas sur la similarité sémantique, mais qui renvoient plutôt tous les mots possibles qui correspndent aux contraintes de longueur et de caractères déjà devinés, et ces systèmes ne fournissent pas un bon moyen de comparer l'approche par réseau sémantique, qui fournit moins de formes globalement.
 
-Notre évaluation est donc une évaluation simple de la capacité du réseau à trouver la solution d'un indice, et qui compare le taux de réussite pour différents niveaux de difficulté et pour différentes catégories syntaxiques. L'évaluation se fait sur un petit corpus d'indices pris d'un site internet de mots fléchés [REF http://www.notretemps.com/jeux/jeux-en-ligne/mots-fleches-gratuits], qui classe les grilles par niveaux. Le corpus se trouve dans l'annexe [REF - put in annexe]. Il est vrai que l'emplacement des mots dans la grille les uns par rapport aux autres contribue au niveau global de la grille, mais nous estimons que le niveau est aussi reflété dans la difficulté des indices individuels. Le corpus contient deux niveaux différents (1 et 2) et pour chaque niveau vingt noms communs, vingt noms propres, vingt adjectifs et vingt verbes. Les indices étaient pris aussi objectivement que possible, avec soin de ne pas répéter le même mot cible entre deux indices, ou de prendre exclusivement des indices qui contiennent une seule tournure. Autant de solutions de chaque catégorie ont été sélectionnées afin de comparer le taux de réussite pour chaque catégorie, mais le constat a été que le niveau contient plus de noms communs et moins de nom propres, ce qui influence aussi la difficulté des indices.
+Notre évaluation est donc une évaluation simple de la capacité du réseau à 
+trouver la solution d'un indice, et qui compare le taux de réussite pour 
+différents niveaux de difficulté et pour différentes catégories syntaxiques. 
+L'évaluation se fait sur un petit corpus d'indices pris d'un site internet de 
+mots fléchés (\hyperref[bib:mfg]{[~\ref*{bib:mfg}]})qui classe les grilles par 
+niveaux. Le corpus se trouve dans l'annexe. Il est vrai 
+que l'emplacement des mots dans la grille les uns par rapport aux autres 
+contribue au niveau global de la grille, mais nous estimons que le niveau est 
+aussi reflété dans la difficulté des indices individuels. Le corpus contient 
+deux niveaux différents (1 et 2) et pour chaque niveau vingt noms communs, vingt 
+noms propres, vingt adjectifs et vingt verbes. Les indices étaient pris aussi 
+objectivement que possible, avec soin de ne pas répéter le même mot cible entre 
+deux indices, ou de prendre exclusivement des indices qui contiennent une seule 
+tournure. Autant de solutions de chaque catégorie ont été sélectionnées afin de 
+comparer le taux de réussite pour chaque catégorie, mais le constat a été que le 
+niveau contient plus de noms communs et moins de nom propres, ce qui influence 
+aussi la difficulté des indices.
 
 A part le but principal de trier les mots candidats par rapport à la similarité sémantique, les choix de traitement sont clairement orientés vers une optimisation du rappel (par exemple, le choix de faire une analyse morphologique point à point). Le système d'évaluation se juge donc sur le rappel des résultats. Pour chaque indice, nous cherchons d'abord si la solution apparaît dans le réseau et si oui, après combien de voisins les plus proches le mot est trouvé. Pour éviter de parcourir tout le réseau en cas de non-découverte, nous limitons le maximum de voisins renvoyés à 200. Au délà de 200, le mot est considéré non-trouvé. Une analyse détaillée se trouve ci-dessous :
 

@@ -133,9 +133,10 @@ pas un résultat s'il n'y a pas de chevauchement entre les deux ensembles.
 \subsection{ Marche Aléatoire }
 
 Avec la construction d'un reseau sémantique, la notion de distance peut se définir
-dans plusieurs manières. Evidamment, entre 2 noeuds $i$ et $j$, on peut prendre le metric de
-la distance la plus courte parmi les chemins qui mènent de $i$ a $j$. Un problème avec cet
-approche se voit facilement avec un simple carré ( \hyperref[fig:square] )
+dans plusieurs manières. Evidamment, entre 2 noeuds $i$ et $j$, on peut prendre 
+la métrique de la distance la plus courte parmi les chemins qui mènent de $i$ a 
+$j$. Un problème avec cette approche se voit facilement avec un simple carré ( 
+\hyperref[fig:square] )
 
 \begin{figure}[!ht]
 \centering
@@ -147,10 +148,11 @@ approche se voit facilement avec un simple carré ( \hyperref[fig:square] )
 \end{figure}
 
 Si le lien A-D existe, alors il va probablement définir la distance A-D, mais s'il n'existe pas,
-soit le chemin A-B-D, soit le chemin A-C-D va le déterminer. Donc si un lien directe est explicite ou
-non peut influencer la distance entre les noeuds. Ainsi, si une définition n'inclue pas un mot qui
-est sémantiquement proche, la distance risque d'être mal-representé. En plus la distance la plus
-courte ne prend pas compte de la diversité de chemins qui peuvent lié deux noeuds.
+soit le chemin A-B-D, soit le chemin A-C-D va le déterminer. Donc si un lien 
+direct est explicite ou non peut influencer la distance entre les noeuds. 
+Ainsi, si une définition n'inclue pas un mot qui est sémantiquement proche, la 
+distance risque d'être mal representée. En plus la distance la plus courte ne 
+prend pas compte de la diversité des chemins qui peuvent lier deux noeuds.
 
 Pour ces raisons, il est possible de proposer une alternative metric de distance en interpretant
 le reseau comme une chaîne de Markov \hyperref[bib:mulleretal]{[~\ref*{bib:mulleretal}]}.

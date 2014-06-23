@@ -22,8 +22,8 @@ si le réseau sémantique établit bien des relations de synonymie.
 
 \subsection{Détection de synonymes}
 
-L'application est très simple et se base sur le parcours en largeur décrit dans 
-la section [REF]. Elle fait un appel à ce parcours pour chercher les k plus 
+L'application est très simple et se base sur le parcours en largeur. Elle fait 
+un appel à ce parcours pour chercher les k plus 
 proches voisins d'un mot donné. Ce mot peut être associé à une catégorie 
 syntaxique ou pas. La catégorie syntaxique du mot cible peut également être 
 spécifiée, permettant de chercher éventuellement des relations autre que la 
@@ -34,8 +34,8 @@ emprunté pour y arriver et la distance entre le mot source et le mot cible.
 
 \subsubsection{L'Interface}
 
-L'interface est réalisée en utilisant les bibliothèques Tkinter [REF] et PMW 
-[REF] sous python.
+L'interface est réalisée en utilisant les bibliothèques Tkinter et PMW sous 
+Python.
 
 \begin{center}
 \includegraphics[width=13cm]{relationfinderinterface.png}
@@ -61,15 +61,15 @@ L'interface est réalisée en utilisant les bibliothèques Tkinter [REF] et PMW
 
 L'objectif principal est de maximiser le nombre de mots trouvés qui 
 correspondent à la relation de synonymie. Le fait que les paramètres différents 
-pour la création et le parcours de la matrice (détaillée en section [REF]) 
-soient des valeurs numériques permet d'envisager une optimisation automatique de 
+pour la création et le parcours de la matrice soient des valeurs numériques 
+permet d'envisager une optimisation automatique de 
 ces valeurs.
 
 Il s'agit, à partir d'un corpus d'entraînement et un vecteur de paramètres de 
 regénérer la matrice et évaluer les résultats contre les ressources [REF]XXX 
 pour trouver les valeurs qui donnent le meilleur score.
 
-La bibliothèque Scipy [REF] fournit une méthode \lq{minimize}\rq{} qui sert à 
+La bibliothèque Scipy fournit une méthode \lq{minimize}\rq{} qui sert à 
 minimiser la valeur retourner d'une fonction à partir d'un vecteur de 
 paramètres.
 
@@ -100,8 +100,8 @@ Notre corpus est composé de 78 mots ayant chacun entre 1 et 10 synonymes.
 \subsubsection{Métrique}
 
 Le vecteur de paramètres comprend les valeurs associées aux types de relations 
-(ex: pos2entry, sense2deftext, ...) et les autres paramètres détaillés dans la 
-section [REF]. La récupération de ce vecteur est incorporée dans le programme 
+(ex: pos2entry, sense2deftext, ...) et d'autres paramètres. La récupération de 
+ce vecteur est incorporée dans le programme 
 pour la création de la matrice, qui contient aussi des méthodes pour changer 
 les valeurs de ces paramètres et pour les réécrire dans les fichiers de 
 configuration.
