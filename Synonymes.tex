@@ -49,3 +49,43 @@ FINIR
 
 
 \subsection{Evaluation}
+
+L'évaluation de RelationFinder s'est faite en deux temps. D'abord grâce à des 
+données récupérées dans le corpus wolf puis grâce à des données récuppérées sur 
+le site de Crisco.
+
+Pour faire cette évaluation nous regardons le mot à traiter puis nous cherchons 
+ses k plus proches voisins (dans notre évaluation k = 19). Si l'un des 
+synonymes du corpus est dans les k plus proches voisins. On donne un score à ce 
+synonyme.
+
+Le score est calculé par rapport à la place du synonymes dans les voisins. Si 
+le synonyme est 3ème sur le 19 voiin il aura un score de 19 - 3 => 16. Si il 
+est 17ème il aura un score de 19 - 17 => 2.
+
+Dans le même temps nous calculons le score maximum qu'il est possible d'avoir. 
+C'est-à-dire k - len(syns). Si dans le corpus nous avons 5 synonymes alors le 
+score maximum sera 19 + 18 + 17 + 16 + 15 => 85.
+
+Pour calculer l'exactitude de notre RelationFinder nous finissons donc par 
+diviser le score de tous nos synonymes trouvés par le score maximum total.
+
+Il faut donc bien noter que k ne doit pas être inférieur au nombre maximal de 
+Synonymes sinon les résultats peuvent tomber en négatif \dots
+
+\subsubsection{wolf}
+
+Dans le corpus wolf nous n'avons récupérés que les données ayant été validées 
+manuellement. Pour être sûrs de ne pas avoir de bruit dû à quelques ambiguïtés.
+
+Notre extrait de wolf contient 120 mots ainsi que leurs synonymes dans le 
+corpus. Chaque mot possède entre 1 et 8 synonymes.
+
+\subsubsection{Crisco}
+
+Le corpus crisco est un petit corpus que nous avons réalisé nous-même pour voir 
+si la source du corpus pouvait modifier grandement ou non l'exactitude obtenue 
+lors de l'évaluation. Nous avons créé ce corpus en entrant les différents mots 
+dans la base de données crisco disponible en ligne.
+
+Notre corpus est composé de 78 mots ayant chacun entre 1 et 10 synonymes.
