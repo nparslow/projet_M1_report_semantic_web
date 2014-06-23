@@ -69,56 +69,9 @@ Il s'agit, à partir d'un corpus d'entraînement et un vecteur de paramètres de
 regénérer la matrice et évaluer les résultats contre les ressources [REF]XXX 
 pour trouver les valeurs qui donnent le meilleur score.
 
-Le vecteur de paramètres comprend les valeurs associées aux types de relations 
-(ex: pos2entry, sense2deftext, ...) et les autres paramètres détaillés dans la 
-section [REF]. La récupération de ce vecteur est incorporé dans le programme 
-pour la création de la matrice, qui contient aussi des méthodes pour changer les 
-valeurs de ces paramètres et pour les réécrire dans les fichiers de 
-configuration.
-
-PARTIE SUR LA FONCTION D'EVALUATION... (je ne veux pas le refaire pour 
-l'instant - Caro - tu peux mettre ta partie ici ?)
-
-L'évaluation selon le corpus se fait en utilisant un métrique défini par 
-nous-mêmes pour juger de la qualité des résultats renvoyés par la recherche. 
-Etant donné que les premiers mots dans la liste sont censés être les plus 
-proches du mot cible, il est important d'incorporer une notion de l'emplacement 
-d'un synonyme trouvé dans la liste de résultats.
-
-DESCRIPTION DU METRIQUE
-
 La bibliothèque Scipy [REF] fournit une méthode \lq{minimize}\rq{} qui sert à 
 minimiser la valeur retourner d'une fonction à partir d'un vecteur de 
 paramètres.
-
-FINIR
-
-
-
-\subsection{Evaluation}
-
-L'évaluation de RelationFinder s'est faite en deux temps. D'abord grâce à des 
-données récupérées dans le corpus WOLF puis grâce à des données récuppérées sur 
-le site de Crisco.
-
-Pour faire cette évaluation nous regardons le mot à traiter puis nous cherchons 
-ses k plus proches voisins (dans notre évaluation k = 19). Si l'un des 
-synonymes du corpus est dans les k plus proches voisins. On donne un score à ce 
-synonyme.
-
-Le score est calculé par rapport à la place du synonymes dans les voisins. Si 
-le synonyme est 3ème sur le 19 voiin il aura un score de 19 - 3 => 16. Si il 
-est 17ème il aura un score de 19 - 17 => 2.
-
-Dans le même temps nous calculons le score maximum qu'il est possible d'avoir. 
-C'est-à-dire k - len(syns). Si dans le corpus nous avons 5 synonymes alors le 
-score maximum sera 19 + 18 + 17 + 16 + 15 => 85.
-
-Pour calculer l'exactitude de notre RelationFinder nous finissons donc par 
-diviser le score de tous nos synonymes trouvés par le score maximum total.
-
-Il faut donc bien noter que k ne doit pas être inférieur au nombre maximal de 
-Synonymes sinon les résultats peuvent tomber en négatif \dots
 
 \subsubsection{WOLF}
 
@@ -142,6 +95,49 @@ lors de l'évaluation. Nous avons créé ce corpus en entrant les différents mo
 dans la base de données crisco disponible en ligne.
 
 Notre corpus est composé de 78 mots ayant chacun entre 1 et 10 synonymes.
+
+
+\subsubsection{Métrique}
+
+Le vecteur de paramètres comprend les valeurs associées aux types de relations 
+(ex: pos2entry, sense2deftext, ...) et les autres paramètres détaillés dans la 
+section [REF]. La récupération de ce vecteur est incorporé dans le programme 
+pour la création de la matrice, qui contient aussi des méthodes pour changer 
+les 
+valeurs de ces paramètres et pour les réécrire dans les fichiers de 
+configuration.
+
+L'évaluation selon le corpus se fait en utilisant une métrique que nous 
+avons nous-même définie pour juger de la qualité des résultats renvoyés par la 
+recherche. Etant donné que les premiers mots dans la liste sont censés être les 
+plus proches du mot cible, il est important d'incorporer une notion de 
+l'emplacement d'un synonyme trouvé dans la liste de résultats.
+
+
+\subsection{Evaluation}
+
+L'évaluation de RelationFinder s'est faite en deux temps. D'abord grâce à des 
+données récupérées dans le corpus WOLF puis grâce à des données récuppérées sur 
+le site de Crisco.
+
+Pour faire cette évaluation nous regardons le mot à traiter puis nous cherchons 
+ses k plus proches voisins (dans notre évaluation k = 19). Si l'un des 
+synonymes du corpus est dans les k plus proches voisins. On donne un score à ce 
+synonyme.
+
+Le score est calculé par rapport à la place du synonymes dans la liste des 
+voisins. Si le synonyme est 3ème sur les 19 voisins, il aura un score de 19 - 3 
+=\textgreater 16. Si il est 17ème il aura un score de 19 - 17 =\textgreater 2.
+
+Dans le même temps nous calculons le score maximum qu'il est possible 
+d'obtenir. C'est-à-dire k - len(syns). Si dans le corpus nous avons 5 synonymes 
+alors le score maximum sera 19 + 18 + 17 + 16 + 15 =\textgreater 85.
+
+Pour calculer l'exactitude de notre RelationFinder nous finissons donc par 
+diviser le score de tous nos synonymes trouvés par le score maximum total.
+
+Il faut donc bien noter que k ne doit pas être inférieur au nombre maximal de 
+Synonymes sinon les résultats peuvent tomber en négatif \dots
 
 \subsubsection{Résultats obtenus}
 
