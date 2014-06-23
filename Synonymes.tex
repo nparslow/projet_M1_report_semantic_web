@@ -28,6 +28,24 @@ L'interface est réalisée en utilisant les bibliothèques Tkinter [REF] et PMW 
 
 \end{enumerate}
 
+\subsubsection{Optimisation}
+
+L'objectif principal est de maximiser le nombre de mots trouvés qui correspondent à la relation de synonymie. Le fait que les paramètres différents pour la création et le parcours de la matrice (détaillée en section [REF]) soient des valeurs numériques permet d'envisager une optimisation automatique de ces valeurs.
+
+Il s'agit, à partir d'un corpus d'entraînement et un vecteur de paramètres de regénérer la matrice et évaluer les résultats contre les ressources [REF]XXX pour trouver les valeurs qui donnent le meilleur score.
+
+Le vecteur de paramètres comprend les valeurs associées aux types de relations (ex: pos2entry, sense2deftext, ...) et les autres paramètres détaillés dans la section [REF]. La récupération de ce vecteur est incorporé dans le programme pour la création de la matrice, qui contient aussi des méthodes pour changer les valeurs de ces paramètres et pour les réécrire dans les fichiers de configuration.
+
+PARTIE SUR LA FONCTION D'EVALUATION... (je ne veux pas le refaire pour l'instant - Caro - tu peux mettre ta partie ici ?)
+
+L'évaluation selon le corpus se fait en utilisant un métrique défini par nous-mêmes pour juger de la qualité des résultats renvoyés par la recherche. Etant donné que les premiers mots dans la liste sont censés être les plus proches du mot cible, il est important d'incorporer une notion de l'emplacement d'un synonyme trouvé dans la liste de résultats.
+
+DESCRIPTION DU METRIQUE
+
+La bibliothèque Scipy [REF] fournit une méthode \lq{minimize}\rq{} qui sert à minimiser la valeur retourner d'une fonction à partir d'un vecteur de paramètres.
+
+FINIR
+
 
 
 \subsection{Evaluation}
