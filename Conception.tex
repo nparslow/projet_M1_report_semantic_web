@@ -92,13 +92,113 @@ très petites. Une autre conséquence démontré par Barabási et Albert
 des noeuds suivre une loi de puissance:
 $$ p(k) \propto k^{-\alpha}$$
 où $p(k)$ est la probabilité d'un noeud quelconque d'avoir un dégré k, et
-$\alpha$ s'approche à l'unité (\hyperref[bib:veronis]{[~\ref*{bib:veronis}]})
+$\alpha$ s'approche à l'unité (\hyperref[bib:veronis]{[~\ref*{bib:veronis}]}). Dans les
+figures \hyperref[fig:ndefinitionsperentry] et \hyperref[fig:nmotsperentry], cette
+comportement est visible pour le Littré dictionnaire.
 
 % make histograms here
+\begin{figure}
+\begin{center}
+\includegraphics{Images/definitions_per_entry_cat.png}
+\caption{Le nombre de définitions par entrée plus catégorie dans le Littré,
+parfois une catégorie manque une
+défintion et a seulement une référence d'où les zéros.}
+\label{fig:ndefinitionsperentry}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics{Images/words_in_definitions.png}
+
+\caption{Le nombre de mots par définition le Littré}
+\label{fig:nmotsperentry}
+\end{center}
+\end{figure}
+
+Un problème qui se présente dans un reseau sémantique est comment d'évaluer une distance
+entre un noeud et un ensemble de noeuds, ou même entre deux ensembles de noeuds. La
+première situation peux se passer dans la classification des textes, où on veut lier
+l'ensemble de mots dans un texte à une classification sémantique pertinente. La
+deuxième situation se voit dans la désamigüisation lexicale, où il y une définition
+composé d'un ensemble de mots qu'on veut comparer avec un contexte, aussi composé
+d'un ensemble de mots.
+
+L'algorithme Lesk \hyperref[bib:lesk]{[~\ref*{bib:lesk}]} est une solution possible pour
+resoudre ce problème. Il se fait par le chevauchement de deux ensembles de mots, dans
+le cas d'un seul mot, sa définition dans le dictionnaire est utilisé. Clairement ce
+methode est très sensible aux mots dans la définition utilisé, et aussi ne donne
+pas un résultat s'il n'y a pas de chevauchement entre les deux ensembles. 
 
 \subsection{ Marche Aléatoire }
 
-Avec la construction d'un reseau sémantique, 
+Avec la construction d'un reseau sémantique, la notion de distance peut se définir
+dans plusieurs manières. Evidamment, entre 2 noeuds $i$ et $j$, on peut prendre le metric de
+la distance la plus courte parmi les chemins qui mènent de $i$ a $j$. Un problème avec cet
+approche se voit facilement avec un simple carré ( \hyperref[fig:square] )
+
+\begin{figure}[!ht]
+\centering
+\includegraphics{Images/square.png}
+%\def\svgwidth{\columnwidth}
+%\input{Images/square.pdf_tex}
+\caption{Un simple reseau avec 4 noeuds}
+\label{fig:square}
+\end{figure}
+
+Si le lien A-D existe, alors il va probablement définir la distance A-D, mais s'il n'existe pas,
+soit le chemin A-B-D, soit le chemin A-C-D va le déterminer. Donc si un lien directe est explicite ou
+non peut influencer la distance entre les noeuds. Ainsi, si une définition n'inclue pas un mot qui
+est sémantiquement proche, la distance risque d'être mal-representé. En plus la distance la plus
+courte ne prend pas compte de la diversité de chemins qui peuvent lié deux noeuds.
+
+Pour ces raisons, il est possible de proposer une alternative metric de distance en interpretant
+le reseau comme une chaîne de Markov \hyperref[bib:mulleretal]{[~\ref*{bib:mulleretal}]}.
+L'entrée $(i,j)$ dans la  matrice d'adjacence est donc
+proportionelle à la probabilité d'une transition de noeud $i$ en noeud $j$. Pour pouvoir interpretter
+ces transitions comme des probabilités il faut les normaliser:
+
+$$p(i\rightarrow j) = \frac{M_{i,j}}{\sum\limits_{k} M_{i,k}}$$
+
+En multipliant un vecteur d'un état $i$ par la matrice à la puissance $t$, on obtien un vecteur
+qui réprésente la probabilité d'être à chaque noeud après un nombre de pas $t$. Pour une graphe
+fortement connexe, si $t$ est grand,
+cette distribution s'approche à un equilibrium ou point stable où le flou de probabilité vers
+un noeud est égal au flou sortant. Cette idée est le coeur de l'algorithme pagerank
+\hyperref[bib:pagerank]{[~\ref*{bib:pagerank}]},
+utilisé par Google pour donner un rang à chaque page dans le graphe de l'internet.
+
+Une difficulté pour pagerank est de gérer la structure du web lui-même, illustré en
+figure \hyperref[fig:webstructure]. Le coeur est un component fortement connexe (scc), il y a
+aussi une grande partie ``In Component'' qui a seulement les liens dirigés vers le scc
+et une deuxième grande partie ``Out Component'' qui ne possède des liens sortants mais
+est la destination des autres liens. Les tendrils, tubes et autres components déconnectés
+entièrements font une portion plus petite. L'algorithme de pagerank va voir après du temps
+toute la probabilité piégé dans les endroits sans sortie, d'où le besoin du `taxation',
+c'est-à-dire la redistribution d'une proportion de probabilité $Beta$ après chaque
+multiplication de $M$. Donc nous avons:
+$$ p(t+1) = \beta*M*p(t) + (1-\beta)*v$$
+où $v$ est un vecteur composé completement de valeurs $1$, au lieu de
+$$ p(t+1) = M*p(t)$$ 
+
+\begin{figure}[!ht]
+\centering
+\includegraphics{Images/web_graph_structure.png}
+\caption{Le structure de la toile, image pris de
+\hyperref[bib:linkanalysis]{[~\ref*{bib:linkanalysis}]}}.
+\label{fig:square}
+\end{figure}
+
+Après un nombre d'itérations $t$ qui est large, il y aura de nouveau un point stable,
+mais sans la probabilité entièrement dans les pièges. Le paramètre $Beta$ est normalement
+choisi d'être  $\approx 0,85$. De plus, il est possible de calculer une probabilité
+biasé par le point d'origine si, au lieu de $v$, on met $v'$ qui a un ensemble de
+noeuds a $1$, et le reste à $0$.
+
+La structure du graphe orienté du dictionnaire ressemble beaucoup à celui de la toile,
+et alors on peut utiliser les mêmes méthodes et algorithme pour calculer la distance
+d'un ensemble de mots vers un seul autre ou un groupe d'autre noeuds.
+
 
 \subsection{Remarques sur la terminologie}
 Nous appelons `mot' toute unité minimale du lexique. Un mot peut être
