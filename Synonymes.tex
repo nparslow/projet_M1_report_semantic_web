@@ -6,7 +6,7 @@ différentes qui sont a priori identifiables par les poids attribués, il devrai
 certaines relations en avant. Nous avons de nombreux paramètres qui peuvent être 
 modifiés pour changer les valeurs données à certaines relations et l'objectif 
 est de trouver les paramètres qui optimise certaines relations. La relation la 
-plus évident à vouloir chercher est celle de la synonymie, qui est une relation 
+plus évidente à vouloir chercher est la synonymie, qui est une relation 
 entre deux mots qui ont le même sens (approximativement). Comme suggéré au 
 début, cette relation est en réalité difficilement définissable, surtout par 
 rapport aux nuances de sens que peuvent prendre des mots. La relation entre 
@@ -29,7 +29,7 @@ syntaxique ou pas. La catégorie syntaxique du mot cible peut également être
 spécifiée, permettant de chercher éventuellement des relations autre que la 
 synonymie (si les catégories source et cible sont différentes).
 
-La liste des voisins (un maximum de k) est renvoyé, ainsi que le chemin 
+La liste des voisins (un maximum de k) est renvoyée, ainsi que le chemin 
 emprunté pour y arriver et la distance entre le mot source et le mot cible.
 
 \subsubsection{L'Interface}
@@ -50,8 +50,8 @@ L'interface est réalisée en utilisant les bibliothèques Tkinter [REF] et PMW
     que pour la catégorie source et peut ne pas correspondre à la catégorie 
     source.}
     \item{Le nombre de voisins à renvoyer. Dans le cas où un mot est relié à 
-    moins de voisins que demandés, le maximum de voisins sera renvoyé.}
-    \item{Pour lancer une recherche du réseau}
+    moins de voisins que demandé, le maximum de voisins sera renvoyé.}
+    \item{Pour lancer une recherche sur le réseau}
     \item{Les voisins sont affichés avec leur distance entre parenthèses. Le 
     chemin est affiché en cliquant sur le signe \lq{+}\rq{}}   
 
@@ -76,9 +76,9 @@ paramètres.
 \subsubsection{WOLF}
 
 Le corpus WOLF a été réalisé à partir du Princeton WordNet et diverses autres 
-ressources multilingues. Il a été évaluer par rapport au WordNet français.
+ressources multilingues. Il a été évalué par rapport au WordNet français.
 
-Dans le corpus wolf nous n'avons récupérés que les données ayant été validées 
+Dans le corpus WOLF nous n'avons récupéré que les données ayant été validées 
 manuellement. Pour être sûrs de ne pas avoir de bruit dû à quelques ambiguïtés.
 
 Notre extrait de wolf contient 120 mots ainsi que leurs synonymes dans le 
@@ -89,10 +89,10 @@ corpus. Chaque mot possède entre 1 et 8 synonymes.
 Le dictionnaire de synonymes Crisco a été réalisé par le laboratoire éponyme 
 spécialisé dans l’analyse de l’articulation entre syntaxe et sémantique.
 
-Le corpus crisco est un petit corpus que nous avons réalisé nous-même pour voir 
-si la source du corpus pouvait modifier grandement ou non l'exactitude obtenue 
-lors de l'évaluation. Nous avons créé ce corpus en entrant les différents mots 
-dans la base de données crisco disponible en ligne.
+Le corpus Crisco est un petit corpus que nous avons réalisé nous-même pour voir 
+si la source du corpus pouvait modifier grandement ou non le score obtenu lors 
+de l'évaluation. Nous avons créé ce corpus en entrant les différents mots dans 
+la base de données Crisco disponible en ligne.
 
 Notre corpus est composé de 78 mots ayant chacun entre 1 et 10 synonymes.
 
@@ -101,10 +101,9 @@ Notre corpus est composé de 78 mots ayant chacun entre 1 et 10 synonymes.
 
 Le vecteur de paramètres comprend les valeurs associées aux types de relations 
 (ex: pos2entry, sense2deftext, ...) et les autres paramètres détaillés dans la 
-section [REF]. La récupération de ce vecteur est incorporé dans le programme 
+section [REF]. La récupération de ce vecteur est incorporée dans le programme 
 pour la création de la matrice, qui contient aussi des méthodes pour changer 
-les 
-valeurs de ces paramètres et pour les réécrire dans les fichiers de 
+les valeurs de ces paramètres et pour les réécrire dans les fichiers de 
 configuration.
 
 L'évaluation selon le corpus se fait en utilisant une métrique que nous 
@@ -141,24 +140,28 @@ Synonymes sinon les résultats peuvent tomber en négatif \dots
 
 \subsubsection{Résultats obtenus}
 
-Lors de l'évalutation nous avons choisis k en fonction du résultat obtenu sur 
-le Littré avec le corpus WOLF. Le k qui donnait le meilleur score d'exactitude 
-était k = 27.
+Lors de l'évalutation nous avons choisi k en fonction du résultat obtenu sur 
+le Littré avec le corpus WOLF. Le k donnant le meilleur score est k = 27.
+
+Les scores peuvent aller de 0 à 1. 0 signifierait qu'aucun synonyme dans la 
+liste gold n'a été trouvé par RelationFinder tandis que 1 signifierait que 
+RelationFinder à trouvé tous les synonymes et qu'ils étaient les premiers mots 
+en relation avec le mot cible.
 
 \begin{enumerate}
  \item {Littré :
 	\begin{enumerate}
-	 \item WOLF : 30,6 \% d'exactitude
-	 \item Crisco : 14,5 \% d'exactitude
+	 \item WOLF :  0,306
+	 \item Crisco : 0,145
 	\end{enumerate}
 	}
  \item {Wiktionnaire :
-	\item WOLF : 31,0 \% d'exactitude
-	\item Crisco : 12,1 \% d'exactitude
+	\item WOLF : 0,310
+	\item Crisco : 0,121
 	}
 \end{enumerate}
 
-Ces score sont relativement bas mais cela peut s'expliquer par le fait que le 
+Ces scores sont relativement bas mais cela peut s'expliquer par le fait que le 
 RelationFinder ne trouve pas que des synonymes mais aussi des antonymes, 
 hyperonymes, etc. Pour améliorer le résultat il suffirait donc d'ajouter 
 tout mot sémantiquement lié au mot que l'on évalue \dots 
