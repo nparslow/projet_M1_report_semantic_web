@@ -1,18 +1,56 @@
 \section{L'implementation du graphe}
 
 \subsection{Choix de langage et de bibliothèques}
-Nous implémentons le graphe en python, pour lequel il existe de nombreuses 
-bibliothèques (Scipy, NumPy) efficaces qui permettent de manipuler un grand 
-nombre de données numériques. Nous utilisons cElementTree pour traiter les 
-fichiers XML et les SparseMatrices de NumPy pour représenter le graphe. Le 
-réseau est alors une matrice NxN où N est le nombre de nœuds différents dans le 
-graphe. Etant donné le grand nombre d'entrées dans les dictionnaires, il y a un 
-avantage clair d'utiliser les matrices sparses, qui permettent de stocker plus 
-efficacement un graphe qui contient de nombreux sommets et peu d'arêtes.
 
+Nous implémentons le graphe en python, pour lequel il existe de nombreuses 
+bibliothèques qui permettent de manipuler un grand 
+nombre de données numériques. Nous avons considérés plusieurs options pour
+la réprésentation du graphe y compris NetworkX, graph-tool et igraph qui
+ont tous des fonctions pour explorer la nature de la graphe. Ces trois
+bibliothèques sont très efficaces dans le parcours des algorithmes très
+diverses et pour les réprésentations graphiques, par contre
+ils sont moins efficace que les dictionnaires
+simples de python pour le stockage dans la memoire.
+Etant donné que notre graph a d'environ deux-cent mille noeuds et quelques millions d'arrêts,
+il nous a fallu trouver une bibliothèque fiable pour ce défi.
+Nous sommes alors restés avec Scipy (et NumPy) pour les matrices sparses et sa
+bibliothèque csgraph pour trouver les composants fortement connexes, et
+les dictionnaires de python pour stocker la bijection noeud : ligne dans
+la matrice. Etant donné le grand nombre d'entrées dans les dictionnaires, il y a un 
+avantage clair d'utiliser les matrices sparses, qui permettent de stocker
+un graphe avec une taille dans la mémoire proportionnelle au nombre d'arrêts
+et pas au nombre de noeuds.
+Nous utilisons cElementTree pour traiter les 
+fichiers XML à cause de sa vitesse de parcours.
+De même pour le sauvegarde, nous avons utilisés 'marshal' au lieu de pickle pour sa
+vitesse.
 
 
 \subsection{La création du graphe}
 Comme mentionné précedemment, le graphe lui-même est implementé en forme de 
 matrice.
+
+Avec XMLTree, on parcours chaque entrée dans le dictionnaire. Pour chaque entrée on descend
+dans l'arbre de cet entré ajoutant les noeuds au fur et à mesure qu'on en a besoin.
+Une fois arrivé à une définition, la définition entier est analysé par MELT et découpé en
+tokens. Pour chaque token son contexte est cherché par des expressions regulières construits
+selon les paramètres écrits dans les fichiers options. Le poids ou absense d'un arrêt possible est
+aussi déterminé au même moment. Pour une phrase tous les arrêts sont stockés et ajoutés ensemble
+à fin de son analyse, ceci permet à la fois la cherche pour une contexte et la non-addition
+des arrêts trouvés être partie d'une telle contexte. Pour Scipy, la création d'une matrice
+sparse exige la connaissance de son taille, donc la matrice est crée seulement à la fin
+du parcours.
+
+Pour l'analyse aléatoire, la graphe construit contient des noeuds pos et défintion au début.
+Les noeuds pos sont enlevés dans un deuxième étape de production parce qu'il faut connaitre
+la nombre de définitions pour créer des liens dans la matrice avec seulement un espèce de noeud.
+Ensuite les noeuds dans le graphe avec un dégrée sortant de zéro sont analysé pour voir s'ils
+sont possiblement seulement mal-taggés - si oui, le noeud est enlevé et chaque arrêt qui menait
+vers lui est bougé vers le remplacement. L'ordre de prioritaire est nom, verbe, adjectif, adverbe
+(de plus haut en plus bas). Le graphe ainsi construit est analysé par la bibliothèque cssparse
+pour trouver le grand composant fortement connexe. Finalement le pagerank biasé est calculé
+pour cette partie seule, un procesus qui dure plus ou moins une journée. 
+
+
+
 
