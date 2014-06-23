@@ -107,3 +107,35 @@ dépourvu de cordialité.' sont deux défintions qui utilisent plusieurs mots
 identiques ou très similaires. Dans ce cas-là l'être humain comprend bien que la 
 première définition désigne plutôt une sensation physique tandis que la deuxième 
 désigne un sentiment resenti.
+
+
+\subsection{Désambiguisation du dictionnaire}
+
+L'analyse marche aléatoire s'est averé beaucoup plus difficile qu'imaginé,
+particulièrement au point de vu de temps. Par contre il y a quelques
+résultats. Tout d'abbord le nombre d'itérations pour trouver le
+point stable. Pour le graphe du littré le point stable est trouvé
+après d'environ 80 multiplications, ce qui est trop lent pour utiliser.
+Heureusement le point ou la définition la plus probable est fixe est
+de l'ordre six, comme on voit dans le table suivant:
+
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline
+nombe d'itérations & 3  & 4  & 5  & 6  & 12 \\
+\hline
+déterminer\_V\_4   & 1  & 1  & 1  & 1  & 1  \\
+ferrer\_V\_3       & 14 & 14 & 4  & 14 & 14 \\
+temps\_N\_32       & 6  & 2  & 2  & 2  & 2  \\
+temps\_N\_9        & 6  & 2  & 2  & 2  & 2  \\
+état\_N\_5         & 9  & 9  & 9  & 9  & 9  \\
+quadrille\_N\_3    & 7  & 7  & 7  & 7  & 7  \\
+extrémité\_N\_8    & 5  & 14 & 14 & 14 & 14 \\
+entrée\_N\_3       & 7  & 3  & 7  & 7  & 7  \\
+heure\_N\_3        & 11 & 11 & 11 & 11 & 11 \\
+annoncer\_V\_2     & 6  & 3  & 3  & 3  & 3  \\
+\hline
+\end{tabular}
+
+le table demonstre le meilleur définition pour le pos ``moment\_''
+dans les définitions dans le table et comment cela se modifie avec
+les itérations de la multiplication de matrice.
