@@ -4,7 +4,8 @@
 \subsection{La première version du graphe}
 
 Les fichiers XML sont facilement transférables en représentation en graphe, 
-puisqu'ils continennent une hiérarchie d'entrées. En principe chaque niveau de 
+puisqu'ils continennent une hiérarchie arborescente d'entrées.
+En principe chaque niveau de 
 l'hiérarchie est représenté par un nœud différent avec des arcs qui lie chaque 
 nœud à ses fils dans l'hiérarchie, comme dans 
 \hyperref[fig:XMLhierarchy]{Figure~\ref*{fig:XMLhierarchy}}. Cette 
@@ -66,4 +67,100 @@ Le résultat est donc un graphe qui contient deux sortes de nœuds: des mots non
 
 \subsection{Graphe minimaliste}
 
+Pour trouver les distances à partir des mots non-taggés ou des ensembles
+conceptuels, le premier graphe fonctionne bien. Par contre pour
+la désambiguisation, les noeuds de éntré et pos ne conviennent pas.
+Tout d'abbord il faut ajouter des noeuds correspondants aux senses
+différents. Si on ignore la différence entre sense et sous-sense (En principe
+cela devrait correspondre à celle de homonymie par rapport au polysemie,
+mais malheureusement ce n'est pas une distinction consistentamment appliqué
+ dans les dictionnaires et alors difficile à incorporer), cela mène à un
+graphe à trois niveaux : entrée, pos et définition.
 
+Si on retient entrée le graphe va contenir une ambiguité inherente
+entre les différents pos. En plus ce niveau n'aide pas à séparer les
+sens parce que des liens vers les définitions doivent soit passer par
+là (et alors avoir une ambiguité de plus), soit aller directe aux noeuds
+pos et alsors le niveau en haut est superflou. Vu que l'information
+catégorielle est disponible avec une bonne précision avec MELT, nous nous
+débarassons du niveau 'entrée' et retient que les mot\_pos et les définitions.
+Une autre manière d'y voir est de considerer que nous enlevons le lien direct
+entre la phonétique et la sémantique. Par exemple le lien entre ``bleu''
+en tant que adjectif et ``bleu'' en tant que nom est consideré arbitraire.
+Pour la majorité de mots ce ne pose pas de problème parce que si les deux
+formes sont liés semantiquement l'un va apparaitre dans la définition
+de l'autre et vice-versa, en plus si on regarde un mot en forme flechi,
+normalement, il
+faut l'avoir déjà désambiguisé categoriellement pour avoir trouver la forme
+dictionnaire (entrée).
+
+le graphe qui resulte ignore la phonétique, mais retient la syntaxe et
+l'ambiguité forte sémantiquement. L'ambiguité est forte parce que chaque
+définiton dans le dictionnaire contient des mots qui sont eux-mêmes
+ambigüs. La graphe est parfaitment bipartite
+et pour des raisons de taille, orienté. 
+
+Pour utiliser ce graphe pour resoudre l'ambigüité sémantique, il va
+falloir tout d'abbord resoudre l'ambigüité interne à la graphe.
+Parce que le graphe est bipartite, on peut enlever un niveau et remplacer
+les arrets sans perdre les distances entre le niveau restant. Nous avons
+tentés de manières de le faire.
+
+Premierement nous avons essayé de prendre seulement le sens de la
+première définition. L'idée derriere est que les définitions sont écrites en
+ordre d'importance et ca va alors souvent être la bonne choix. Malheureusement
+un regarde sur le dictionnaire a démontré que ce n'est pas le cas et une
+solution si facile ne nous aiderons pas.
+
+La forme du graphe se ressemble au graphe de la toile (ref section plus tot
+XXXXXXX), figure XXXX
+
+\begin{figure}
+\centering
+\parbox{5cm}{
+\def\svgscale{0.5}
+\input{Images/graph_shocker.pdf_tex}
+\caption{}
+\label{fig:graph_shocker}}
+\end{figure}
+
+Ce graphe contient un component très large et fortement connexe (SCC) (jaune),
+une petite partie sortante (verte) qui contient des mots qui sont
+utilisés dans les définitions mais qui ne possède pas une définition
+eux-mêmes. La plupart d'eux sont des mots mal-taggés ou que MELT n'a
+pas reconnu. La troisième partie (rouge) est la partie des mots qui
+ont définitions mais qui ne sont jamais utilisés dans une définition
+eux-même. Ils peuvent aussi avoir des mots non-définis dans leurs
+définitions d'où les tendrils.
+
+La partie sortant peut être reduit en regardant si le mot\_pos existe
+dans le dictionnaire mais avec une autre catégorie. Ce procesus remplace
+entre la moitié et un tiers de tels noeuds. (voir code merge\_rows XXXXX)
+Il faut noter aussi, que la partie entrant est exactement comme une
+phrase à l'extérieur du dictionnaire, c'est à dire que pour désambiguiser
+le dictionnaire, on peut seulement se concentrer sur le componant
+fortement connexe. Celui nous aide beaucoup parce que la taille du
+graphe est si large.
+
+\begin{tabular}{l|c|c|c}
+\hline
+             & Composant Sortant & SCC & Composant Entrant \\
+\hline
+Graphe A     &                   &     &                   \\
+\hline
+Graphe B     &                   &     &                   \\
+\hline
+\end{tabular}
+
+TABLE TO FILL XXXXX
+
+la table montre les tailles des composants pour un graphe sans ambiguité
+(Graphe A), c'est le graphe avec seulement les prémieres définitions
+choisies, et pour un graphe maximalement ambigue, c'est le graphe
+où s'il y a un lien de noeud $i$ vers noeud $j$ et $j$ est une des
+definitions possibles pour un mot $m$ alors le graphe contient aussi des
+liens de $i$ vers toute autre définiton de $m$
+
+TODO
+- idea of iterated page rank
+- difficulties with size
