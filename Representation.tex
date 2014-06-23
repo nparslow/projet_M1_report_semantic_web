@@ -69,8 +69,8 @@ Le résultat est donc un graphe qui contient deux sortes de nœuds: des mots non
 
 Pour trouver les distances à partir des mots non-taggés ou des ensembles
 conceptuels, le premier graphe fonctionne bien. Par contre pour
-la désambiguisation, les noeuds de éntré et pos ne conviennent pas.
-Tout d'abbord il faut ajouter des noeuds correspondants aux senses
+la désambiguisation, les noeuds de éntré et pos ne sont pas convenables.
+Tout d'abbord il faut au minimum, ajouter des noeuds correspondants aux senses
 différents. Si on ignore la différence entre sense et sous-sense (En principe
 cela devrait correspondre à celle de homonymie par rapport au polysemie,
 mais malheureusement ce n'est pas une distinction consistentamment appliqué
@@ -78,39 +78,29 @@ mais malheureusement ce n'est pas une distinction consistentamment appliqué
 graphe à trois niveaux : entrée, pos et définition.
 
 Si on retient entrée le graphe va contenir une ambiguité inherente
-entre les différents pos. En plus ce niveau n'aide pas à séparer les
+entre les différents pos. Ce niveau n'aide pas à séparer les
 sens parce que des liens vers les définitions doivent soit passer par
-là (et alors avoir une ambiguité de plus), soit aller directe aux noeuds
-pos et alsors le niveau en haut est superflou. Vu que l'information
+là (et alors avoir une ambiguité de plus), soit aller directement aux noeuds
+pos et alors le niveau en haut est superflou. Vu que l'information
 catégorielle est disponible avec une bonne précision avec MELT, nous nous
-débarassons du niveau 'entrée' et retient que les mot\_pos et les définitions.
+débarassons du niveau `entrée' et retient que les mot\_pos et les définitions.
 Une autre manière d'y voir est de considerer que nous enlevons le lien direct
-entre la phonétique et la sémantique. Par exemple le lien entre ``bleu''
-en tant que adjectif et ``bleu'' en tant que nom est consideré arbitraire.
+entre la phonétique et la sémantique. Par exemple, dans un tel graphe,
+ le lien entre ``bleu''
+en tant que adjectif et ``bleu'' en tant que nom n'est pas automatique.
 Pour la majorité de mots ce ne pose pas de problème parce que si les deux
 formes sont liés semantiquement l'un va apparaitre dans la définition
 de l'autre et vice-versa, en plus si on regarde un mot en forme flechi,
 normalement, il
 faut l'avoir déjà désambiguisé categoriellement pour avoir trouver la forme
-dictionnaire (entrée).
+dictionnaire (l'entrée) donc en pratique ce n'est pas un niveau utile.
 
 le graphe qui resulte ignore la phonétique, mais retient la syntaxe et
 l'ambiguité forte sémantiquement. L'ambiguité est forte parce que chaque
 définiton dans le dictionnaire contient des mots qui sont eux-mêmes
-ambigüs. La graphe est parfaitment bipartite
-et pour des raisons de taille, orienté. 
-
-Pour utiliser ce graphe pour resoudre l'ambigüité sémantique, il va
-falloir tout d'abbord resoudre l'ambigüité interne à la graphe.
-Parce que le graphe est bipartite, on peut enlever un niveau et remplacer
-les arrets sans perdre les distances entre le niveau restant. Nous avons
-tentés de manières de le faire.
-
-Premierement nous avons essayé de prendre seulement le sens de la
-première définition. L'idée derriere est que les définitions sont écrites en
-ordre d'importance et ca va alors souvent être la bonne choix. Malheureusement
-un regarde sur le dictionnaire a démontré que ce n'est pas le cas et une
-solution si facile ne nous aiderons pas.
+ambigüs. Ce graphe est parfaitment bipartite.
+et pour éviter la cross-contamination des liens sémantiques des
+définitions, il est orienté. 
 
 La forme du graphe se ressemble au graphe de la toile (ref section plus tot
 XXXXXXX), figure XXXX
@@ -139,28 +129,74 @@ entre la moitié et un tiers de tels noeuds. (voir code merge\_rows XXXXX)
 Il faut noter aussi, que la partie entrant est exactement comme une
 phrase à l'extérieur du dictionnaire, c'est à dire que pour désambiguiser
 le dictionnaire, on peut seulement se concentrer sur le componant
-fortement connexe. Celui nous aide beaucoup parce que la taille du
+fortement connexe. Ce fait nous aide beaucoup parce que la taille du
 graphe est si large.
 
-\begin{tabular}{l|c|c|c}
+\begin{tabular}{|l|c|c|c|}
 \hline
-             & Composant Sortant & SCC & Composant Entrant \\
+             & Composant Sortant & SCC   & Composant Entrant \\
 \hline
-Graphe A     &                   &     &                   \\
+Graphe A     &  5195             & 64180 &  77742            \\
 \hline
-Graphe B     &                   &     &                   \\
+Graphe B     &  6248             & 63356 &  81181             \\
 \hline
 \end{tabular}
 
-TABLE TO FILL XXXXX
 
 la table montre les tailles des composants pour un graphe sans ambiguité
 (Graphe A), c'est le graphe avec seulement les prémieres définitions
-choisies, et pour un graphe maximalement ambigue, c'est le graphe
+choisies, et pour un graphe maximalement ambigue (Graphe B), c'est le graphe
 où s'il y a un lien de noeud $i$ vers noeud $j$ et $j$ est une des
 definitions possibles pour un mot $m$ alors le graphe contient aussi des
 liens de $i$ vers toute autre définiton de $m$
 
-TODO
-- idea of iterated page rank
-- difficulties with size
+\begin{tabular}{|l|c|c|c|c|c|c|c|}
+\hline
+Taille de sccs               & 1      & 2    & 3   & 4  & 5  & 6  & 7 \\
+\hline
+Graphe A Composant Sortant   & 5195   & -    & -   & -  & -  & -  & -  \\
+Graphe A Composant Entrant   & 76484  & 990  & 184 & 62 & 18 & 1  & 3 \\
+\hline
+Graphe B Composant Sortant   & 6248   & -    & -   & -  & -  & -  & -  \\
+Graphe B Composant Entrant   & 79881  & 1009 & 200 & 64 & 22 & 2  & 3  \\
+\hline
+\end{tabular}
+
+Pour utiliser ce graphe pour resoudre l'ambigüité sémantique, il
+faut tout d'abbord resoudre l'ambigüité interne propre à la graphe.
+Parce que le graphe est bipartite, on peut enlever un niveau et remplacer
+les arrets sans perdre les distances entre le niveau restant.
+
+Premierement nous avons essayé de prendre seulement le sens de la
+première définition (le poid des liens vers des autres définitions
+alors étant zéro pour chaque utilisation). L'idée derriere est que
+ les définitions sont écrites en
+ordre d'importance et ca va alors souvent être la bonne choix. Un regarde
+ sur le dictionnaire a démontré que ce n'est pas en fait le cas et une
+solution si facile ne nous aide pas.
+
+En principe la partie fortement connexe de la matrice peut
+ se désambiguiser lui-même en regardant le flou de probabilité de
+chaque noeud définition vers son noeud pos mère dans le graphe où tout les
+probabilités entre un pos et ses définitions sont egaux, la définition la
+plus prôche va avoir la plus grande probabilité de rentrer à sa mère dans
+le graphe (figure XXXXXX).
+
+
+\begin{figure}
+\centering
+\parbox{5cm}{
+\def\svgscale{0.5}
+\input{Images/graphloop.pdf_tex}
+\caption{Un noeud pos $A$ a deux définitions: $B$ et $C$. La probabilité
+la plus grande entre $p(B\rightarrow A)$ et $p(C\rightarrow A)$ détermine
+le sens préféré.}
+\label{fig:graphloop}}
+\end{figure}
+
+Il est même possible d'envisager un processus itérative par Expectation
+Maximisation (EM) où la probabilité d'une transition se rédefinit à
+chaque tour par (par exemple pour le graph dans figure XXXXX)
+$$p_t(i\rightarrow j) = \frac{p(j\rightarrow i)}{\sum\limits_{k}p(k\rightarrow i)}$$
+où la somme k est une élement des noeuds définitions pour le même pos que $j$.
+Malheureusement le temps neccessaire pour cet algorithme était trop grand pour l'essayer avec nos ordinateurs actuels.
